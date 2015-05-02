@@ -12,9 +12,9 @@ namespace ch.jaxx.TaskManager.DataAccess
         {
             using (var ctx = new FirebirdContext(@"server type=Embedded;user id=sysdba;password=masterky;dialect=3;character set=UTF8;client library=fbembed.dll;database=D:\task.fdb"))
             {
-                var task = new TaskModel() { Name = DateTime.Now.Ticks.ToString() };
-                ctx.Tasks.Add(task);
-                ctx.SaveChanges();
+                //var task = new TaskModel() { Name = DateTime.Now.Ticks.ToString() };
+                //ctx.Tasks.Add(task);
+                //ctx.SaveChanges();
 
                 foreach (var t in ctx.Tasks)
                 {

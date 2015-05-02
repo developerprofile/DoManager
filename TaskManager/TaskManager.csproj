@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="DataAccess\FirebirdContext.cs" />
     <Compile Include="DataAccess\FirebirdContextConfiguration.cs" />
+    <Compile Include="DataAccess\TaskManager.cs" />
     <Compile Include="DataAccess\TaskModel.cs" />
     <Compile Include="DataAccess\TestAccess.cs" />
     <Compile Include="Program.cs" />
