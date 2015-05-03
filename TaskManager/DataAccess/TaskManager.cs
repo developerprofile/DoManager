@@ -50,7 +50,9 @@ namespace ch.jaxx.TaskManager.DataAccess
             // find all task which are not done and not active
             var taskList = context.Tasks
                                 .Where(t => t.State != TaskState.DONE)
-                                .Where(t => t.State != TaskState.ACTIVE)
+                                //.Where(t => t.State != TaskState.ACTIVE) 
+                                // TODO: Once interupt is handled remove comment
+                                // > as long as interupt is not handled we've to keep a chance to reset an active task to NEXT state
                                 .OrderBy(t => t.CreationDate);
 
             // check if a special task id should become the next task,
@@ -63,7 +65,8 @@ namespace ch.jaxx.TaskManager.DataAccess
             // Is nextTask still null? So TaskId is 0 or
             // maybe the given task id was wrong and was not in list,
             // so we'll give taskman a chance to mark the oldest task as next
-            if (nextTask == null) nextTask = taskList.FirstOrDefault();
+            if (nextTask == null) nextTask = taskList.Where(t => t.State != TaskState.ACTIVE).FirstOrDefault();
+            // TODO: Once interupt is handled filter ACTIVE state as described some lines above.
             
 
             // maybe there is no task at all in our list, so return null
