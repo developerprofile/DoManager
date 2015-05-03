@@ -22,11 +22,15 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <summary>
         /// Adds a new task at the end of the task queue
         /// </summary>
-        /// <param name="TaskName"/>
+        /// <param name="TaskName">Taskname, task will no be created if taskname is empty</param>
         public void CreateQueueTask(string TaskName)
         {
-            context.Tasks.Add(new TaskModel() { Name = TaskName, CreationDate = DateTime.Now });
-            context.SaveChanges();
+            // Don't do anything if taskname is not provided
+            if (!String.IsNullOrWhiteSpace(TaskName))
+            {
+                context.Tasks.Add(new TaskModel() { Name = TaskName, CreationDate = DateTime.Now });
+                context.SaveChanges();
+            }
             
         }
 
@@ -67,6 +71,23 @@ namespace ch.jaxx.TaskManager.DataAccess
                 return nextTask;
             }
             else return null;
+        }
+
+        /// <summary>
+        /// Evaluate the next task an marks it as NEXT. This method is intended for passing taskid from UI Input fields where input 
+        /// has not been validated as integer value.
+        /// </summary>
+        /// <param name="TaskId">TaskId</param>
+        /// <returns>Returns th task which has been marked as next and NULL in case the was
+        /// no next task found.</returns>
+        /// <seealso cref="MarkNextTask(int TaskId)"/>
+        /// <remarks>This method wrapps the MarkNextTask(int Taskid) but takes a string instead of an integer.
+        /// The method will try to convert the string into integer and will pass 0 to to the MarkNextTask method. </remarks>
+        public TaskModel MarkNextTask(string TaskId)
+        {
+            int nextTask = 0;
+            Int32.TryParse(TaskId, out nextTask);
+            return MarkNextTask(nextTask);
         }
 
         /// <summary>

@@ -36,11 +36,8 @@ namespace TaskManagerWPF
         }
 
         private void btnMarkNextTask_Click(object sender, RoutedEventArgs e)
-        {
-            int nextTask = 0;
-            Int32.TryParse(tbNextTask.Text, out nextTask);
-            
-            taskMan.MarkNextTask(nextTask);
+        {  
+            taskMan.MarkNextTask(tbNextTask.Text);
             tbNextTask.Text = "";
             AllTasksToListBox();
 
@@ -70,8 +67,7 @@ namespace TaskManagerWPF
         }
 
         private void btnCreateTask_Click(object sender, RoutedEventArgs e)
-        {
-            if (!String.IsNullOrWhiteSpace(tbNewTask.Text))
+        {            
             taskMan.CreateQueueTask(tbNewTask.Text);
             tbNewTask.Text = "";
             AllTasksToListBox();
