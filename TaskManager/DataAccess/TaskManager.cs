@@ -55,12 +55,16 @@ namespace ch.jaxx.TaskManager.DataAccess
 
             // check if a special task id should become the next task,
             // otherwise choose the oldest task the next task
-            TaskModel nextTask;
+            TaskModel nextTask = null;
             if (TaskId != 0)
             {
                 nextTask = taskList.Where(t => t.Id == TaskId).FirstOrDefault();
             }
-            else nextTask = taskList.FirstOrDefault();
+            // Is nextTask still null? So TaskId is 0 or
+            // maybe the given task id was wrong and was not in list,
+            // so we'll give taskman a chance to mark the oldest task as next
+            if (nextTask == null) nextTask = taskList.FirstOrDefault();
+            
 
             // maybe there is no task at all in our list, so return null
             // otherwise make the selected task the next task
