@@ -33,15 +33,33 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <summary>
         /// Evaluate the next task and mark it as NEXT
         /// </summary>
+        /// <param name="TaskId">If provided the task with this id will become next task. Otherwise the oldest task will be selected
+        /// (if 0 is passed, default = 0)</param>
         /// <returns>Returns th task which has been marked as next and NULL in case the was
         /// no next task found.</returns>
-        public TaskModel MarkNextTask()
+        public TaskModel MarkNextTask(int TaskId = 0) 
         {
-            var nextTask = context.Tasks
-                                .Where(t => t.State != TaskState.DONE)
-                                .OrderBy(t => t.CreationDate)
-                                .FirstOrDefault();
+            // if a next tasks exists, first reset it' state
+            var resetFormerlyNext = context.Tasks.Where(t => t.State == TaskState.NEXT).FirstOrDefault();
+            if (resetFormerlyNext != null) resetFormerlyNext.State = null;
 
+            // find all task which are not done and not active
+            var taskList = context.Tasks
+                                .Where(t => t.State != TaskState.DONE)
+                                .Where(t => t.State != TaskState.ACTIVE)
+                                .OrderBy(t => t.CreationDate);
+
+            // check if a special task id should become the next task,
+            // otherwise choose the oldest task the next task
+            TaskModel nextTask;
+            if (TaskId != 0)
+            {
+                nextTask = taskList.Where(t => t.Id == TaskId).FirstOrDefault();
+            }
+            else nextTask = taskList.FirstOrDefault();
+
+            // maybe there is no task at all in our list, so return null
+            // otherwise make the selected task the next task
             if (nextTask != null)
             {
                 nextTask.State = TaskState.NEXT;
@@ -54,14 +72,18 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <summary>
         /// Starts the next task by setting it's start date to now.
         /// </summary>
-        /// <returns>Returns the task wich has been started.</returns>
+        /// <returns>Returns the task wich has been started and null, if not task to start was found.</returns>
         public TaskModel StartNextTask()
         {
             var nextTask = context.Tasks.Where(t => t.State == TaskState.NEXT).FirstOrDefault();
-            nextTask.State = TaskState.ACTIVE;
-            nextTask.StartDate = DateTime.Now;
-            context.SaveChanges();
-            return nextTask;
+            if (nextTask != null)
+            {
+                nextTask.State = TaskState.ACTIVE;
+                nextTask.StartDate = DateTime.Now;
+                context.SaveChanges();
+                return nextTask;
+            }
+            else return null;
         }
 
         /// <summary>
@@ -83,7 +105,7 @@ namespace ch.jaxx.TaskManager.DataAccess
 
         public List<TaskModel> GetAllTasks()
         {
-            return context.Tasks.ToList();            
+            return context.Tasks.Where(t => t.State != TaskState.DONE).ToList();            
         }
     }
 }

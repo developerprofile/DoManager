@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ch.jaxx.TaskManager.DataAccess
 {
-    enum TaskState
+    public enum TaskState
     {
         ACTIVE, DONE, NEXT
     }

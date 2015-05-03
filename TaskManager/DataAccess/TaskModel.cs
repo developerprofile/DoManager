@@ -24,8 +24,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         [Column("DONEDATE")]
         public DateTime? DoneDate { get; set; }
 
-        [Column("STATE")]
-        [MaxLength(16)]
+        [Column("STATE")]        
         public TaskState? State { get; set; }
     }
 }
