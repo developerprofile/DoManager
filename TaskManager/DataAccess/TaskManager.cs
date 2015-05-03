@@ -72,9 +72,11 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <summary>
         /// Starts the next task by setting it's start date to now.
         /// </summary>
-        /// <returns>Returns the task wich has been started and null, if not task to start was found.</returns>
+        /// <returns>Returns the task wich has been started and null, if no task to start was found or there is still 
+        /// an unfinished task.</returns>
         public TaskModel StartNextTask()
         {
+            if (ActiveTask != null) return null;
             var nextTask = context.Tasks.Where(t => t.State == TaskState.NEXT).FirstOrDefault();
             if (nextTask != null)
             {
@@ -92,7 +94,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <returns>Returns the finished task, and NULL in case no active task was found.</returns>
         public TaskModel FinishCurrentTask()
         {
-            var finishedTask = context.Tasks.Where(t => t.State == TaskState.ACTIVE).FirstOrDefault();
+            var finishedTask = ActiveTask;
             if (finishedTask != null)
             {
                 finishedTask.State = TaskState.DONE;
@@ -101,6 +103,23 @@ namespace ch.jaxx.TaskManager.DataAccess
                 return finishedTask;
             }
             else return null;
+        }
+
+        /// <summary>
+        /// Gets the active task, null if no task is active.
+        /// </summary>
+        public TaskModel ActiveTask
+        {
+            get 
+            {
+                var activeTask = context.Tasks.Where(t => t.State == TaskState.ACTIVE).FirstOrDefault();
+                if (activeTask != null)
+                {
+                    return activeTask;
+                }
+                else return null;
+            }
+
         }
 
         public List<TaskModel> GetAllTasks()

@@ -23,11 +23,10 @@ namespace TaskManagerWPF
     {
         public MainWindow()
         {
-            InitializeComponent();
-            this.taskMan = new TaskManager(connectionString);
+            InitializeComponent();            
         }
 
-        private string connectionString = @"server type=Embedded;user id=sysdba;password=masterky;dialect=3;character set=UTF8;client library=fbembed.dll;database=D:\task.fdb";
+        
         private TaskManager taskMan;
 
         private void btnShowAllTasks_Click(object sender, RoutedEventArgs e)
@@ -76,6 +75,21 @@ namespace TaskManagerWPF
             taskMan.CreateQueueTask(tbNewTask.Text);
             tbNewTask.Text = "";
             AllTasksToListBox();
+        }
+
+        private void btnOpenDb_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var openDialog = new Microsoft.Win32.OpenFileDialog();
+            if(openDialog.ShowDialog().Value)
+            {
+                string connectionString = String.Format(@"server type=Embedded;user id=sysdba;password=masterky;dialect=3;character set=UTF8;client library=fbembed.dll;database={0}",openDialog.FileName);
+                this.taskMan = new TaskManager(connectionString);
+                btnOpenDb.IsEnabled = false;
+                this.Title = this.Title + " - " + openDialog.FileName;
+            }
+
+            
         }
         
     }
