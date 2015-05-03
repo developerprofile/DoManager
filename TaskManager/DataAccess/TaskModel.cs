@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ch.jaxx.TaskManager.DataAccess
@@ -13,5 +14,18 @@ namespace ch.jaxx.TaskManager.DataAccess
         [Column("NAME")]
         [MaxLength(256)]
         public string Name { get; set; }
+
+        [Column("CREATIONDATE")]        
+        public DateTime? CreationDate { get; set; }
+
+        [Column("STARTDATE")]
+        public DateTime? StartDate { get; set; }
+
+        [Column("DONEDATE")]
+        public DateTime? DoneDate { get; set; }
+
+        [Column("STATE")]
+        [MaxLength(16)]
+        public TaskState? State { get; set; }
     }
 }

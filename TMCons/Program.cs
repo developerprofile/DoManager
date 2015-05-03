@@ -13,15 +13,19 @@ namespace TMCons
         {
             string connectionString = @"server type=Embedded;user id=sysdba;password=masterky;dialect=3;character set=UTF8;client library=fbembed.dll;database=D:\task.fdb";
             var taskMan = new TaskManager(connectionString);
-            Console.Write("Input new task:");
+            Console.Write("Input new task: ");
             var input = Console.ReadLine();
-            taskMan.CreateQueueTask(new TaskModel(){Name = input});
+            Console.WriteLine("Insert entry...");
+            taskMan.CreateQueueTask(input);
+            Console.WriteLine("List tasks...");
             foreach (var t in taskMan.GetAllTasks())
             {
-                Console.WriteLine("Taskid: {0} || Taskname: {1}", t.Id, t.Name);
+                Console.WriteLine("Taskid: {0} \t Created: {2} \t Taskname: {1}", t.Id, t.Name, t.CreationDate);
             }
-            //var test = new TestAccess();
-            //test.GetTasks();
+
+            Console.WriteLine("Press any key...");
+            Console.ReadKey();
+            Console.WriteLine("Shutting down...");
         }
     }
 }

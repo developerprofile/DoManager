@@ -65,8 +65,7 @@
     <Compile Include="DataAccess\FirebirdContextConfiguration.cs" />
     <Compile Include="DataAccess\TaskManager.cs" />
     <Compile Include="DataAccess\TaskModel.cs" />
-    <Compile Include="DataAccess\TestAccess.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="DataAccess\TaskState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
