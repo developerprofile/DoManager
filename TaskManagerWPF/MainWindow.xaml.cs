@@ -83,6 +83,7 @@ namespace TaskManagerWPF
                 this.taskMan = new TaskManager(connectionString);
                 btnOpenDb.IsEnabled = false;
                 this.Title = this.Title + " - " + openDialog.FileName;
+                AllTasksToListBox();
             }
 
             
