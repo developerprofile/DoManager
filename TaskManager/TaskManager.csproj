@@ -51,6 +51,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.4.6.2.0\lib\net45\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
+    <Reference Include="libjfunx">
+      <HintPath>..\packages\ch.jaxx.libjfunx.dll.3.0.0\lib\libjfunx.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -66,6 +69,8 @@
     <Compile Include="DataAccess\TaskManager.cs" />
     <Compile Include="DataAccess\TaskModel.cs" />
     <Compile Include="DataAccess\TaskState.cs" />
+    <Compile Include="DbMigration\DbMigrator.cs" />
+    <Compile Include="DbMigration\DbVersionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

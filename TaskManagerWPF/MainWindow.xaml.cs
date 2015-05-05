@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ch.jaxx.TaskManager.DataAccess;
+using libjfunx.logging; 
 
 namespace TaskManagerWPF
 {
@@ -23,7 +24,8 @@ namespace TaskManagerWPF
     {
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            Logger.SetLogger(new ReflectingFileLogger(Properties.Settings.Default.Logfile,LogEintragTyp.Debug));
         }
 
         
@@ -83,6 +85,7 @@ namespace TaskManagerWPF
                 this.taskMan = new TaskManager(connectionString);
                 btnOpenDb.IsEnabled = false;
                 this.Title = this.Title + " - " + openDialog.FileName;
+                
                 AllTasksToListBox();
             }
 

@@ -25,5 +25,6 @@ namespace ch.jaxx.TaskManager.DataAccess
 
 		//public DbSet<MONDatabase> MONDatabase { get; set; }
         public DbSet<TaskModel> Tasks { get; set; }
+        public DbSet<ch.jaxx.TaskManager.DbMigration.DbVersionModel> DbVersion { get; set; }
 	}
 }
