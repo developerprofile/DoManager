@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using libjfunx.logging;
 
 namespace ch.jaxx.TaskManager.DataAccess
 {
@@ -73,6 +74,8 @@ namespace ch.jaxx.TaskManager.DataAccess
             // otherwise make the selected task the next task
             if (nextTask != null)
             {
+                // if next task is the active one, pause it
+                if (nextTask.State == TaskState.ACTIVE) EndTaskPhase(ActiveTask);
                 nextTask.State = TaskState.NEXT;
                 context.SaveChanges();
                 return nextTask;
@@ -109,12 +112,14 @@ namespace ch.jaxx.TaskManager.DataAccess
             if (nextTask != null)
             {
                 nextTask.State = TaskState.ACTIVE;
-                nextTask.StartDate = DateTime.Now;
+                if (nextTask.StartDate == null) nextTask.StartDate = DateTime.Now;
                 context.SaveChanges();
+                StartTaskPhase(nextTask);
                 return nextTask;
             }
             else return null;
         }
+
 
         /// <summary>
         /// Stops the task which is currently markes as ACTIVE.
@@ -125,6 +130,8 @@ namespace ch.jaxx.TaskManager.DataAccess
             var finishedTask = ActiveTask;
             if (finishedTask != null)
             {
+                EndTaskPhase(finishedTask);
+
                 finishedTask.State = TaskState.DONE;
                 finishedTask.DoneDate = DateTime.Now;
                 context.SaveChanges();
@@ -132,6 +139,7 @@ namespace ch.jaxx.TaskManager.DataAccess
             }
             else return null;
         }
+
 
         /// <summary>
         /// Gets the active task, null if no task is active.
@@ -148,6 +156,39 @@ namespace ch.jaxx.TaskManager.DataAccess
                 else return null;
             }
 
+        }
+
+        /// <summary>
+        /// Creates a new phase for the given task.
+        /// </summary>
+        /// <param name="OwnerTask"></param>
+        private void StartTaskPhase(TaskModel OwnerTask)
+        {
+            var taskPhase = new TaskPhaseModel()
+            {
+                TaskId = OwnerTask.Id,
+                StartDate = DateTime.Now
+            };
+
+            context.TaskPhases.Add(taskPhase);
+            context.SaveChanges();
+            Logger.Log(LogEintragTyp.Debug, "Start new task phase for taskid " + OwnerTask.Id);
+        }
+
+        /// <summary>
+        /// Ends the active task phase of the owner task
+        /// </summary>
+        /// <param name="OwnerTask"></param>
+        private void EndTaskPhase(TaskModel OwnerTask)
+        {
+            var lastTaskPhase = context.TaskPhases.Where(p => p.TaskId == OwnerTask.Id)
+                .Where(p => p.EndDate == null).FirstOrDefault();
+
+            lastTaskPhase.EndDate = DateTime.Now;
+            context.SaveChanges();
+            Logger.Log(LogEintragTyp.Debug, "End task phase for taskid " + OwnerTask.Id);
+
+            
         }
 
         public List<TaskModel> GetAllTasks()
