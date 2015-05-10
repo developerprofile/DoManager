@@ -197,5 +197,27 @@ namespace ch.jaxx.TaskManager.DataAccess
         {
             return context.Tasks.Where(t => t.State != TaskState.DONE).ToList();            
         }
+
+        public void LogTaskDurations()
+        {
+            var doneTasks = context.Tasks.Where(t => t.State == TaskState.DONE).OrderBy(t => t.DoneDate);
+
+            // foreach task which is done
+            foreach (var task in doneTasks)
+            {
+                var taskDuration = new TimeSpan();
+                var phases = context.TaskPhases.Where(p => p.TaskId == task.Id);
+                                
+                // foreach phase of this task
+                foreach (var phase in phases)
+                {
+                    var phaseduration = phase.EndDate.Value - phase.StartDate.Value;
+                    taskDuration = taskDuration.Add(phaseduration);
+                }
+
+                Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskDoneDate: {1} |  Duration {2} | Task: {0}", task.Name, task.DoneDate, taskDuration.ToString()));
+            }
+
+        }
     }
 }

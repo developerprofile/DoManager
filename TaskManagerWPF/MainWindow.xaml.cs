@@ -91,6 +91,11 @@ namespace TaskManagerWPF
 
             
         }
+
+        private void btnLogDuration_Click(object sender, RoutedEventArgs e)
+        {
+            this.taskMan.LogTaskDurations();
+        }
         
     }
 }

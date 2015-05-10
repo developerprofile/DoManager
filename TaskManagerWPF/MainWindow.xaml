@@ -14,6 +14,7 @@
         <Button x:Name="btnCreateTask" Content="Create new task" HorizontalAlignment="Left" Height="25" Margin="10,444,0,0" VerticalAlignment="Top" Width="111" Click="btnCreateTask_Click"/>
         <TextBox x:Name="tbNextTask" HorizontalAlignment="Left" Height="23" Margin="862,77,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="103"/>
         <Button x:Name="btnOpenDb" Content="Open Db" HorizontalAlignment="Left" Height="29" Margin="862,177,0,0" VerticalAlignment="Top" Width="103" Click="btnOpenDb_Click"/>
+        <Button x:Name="btnLogDuration" Content="Log Duration" HorizontalAlignment="Left" Height="29" Margin="862,211,0,0" VerticalAlignment="Top" Width="103" Click="btnLogDuration_Click"/>
     </Grid>
 
 
