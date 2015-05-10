@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="TaskManagerWPF.MainWindow"
-        Title="Task Manager" d:DesignWidth="983" Background="{x:Null}">
+        Title="Task Manager" d:DesignWidth="983" Background="{x:Null}" Icon="pack://siteoforigin:,,,/Resources/TM.ico">
     <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
         <Button x:Name="btnShowAllTasks" Content="Show all tasks" HorizontalAlignment="Left" Height="29" Margin="862,9,0,0" VerticalAlignment="Top" Width="103" Click="btnShowAllTasks_Click"/>
         <ListBox x:Name="listBoxTasks" HorizontalAlignment="Left" Height="429" Margin="10,10,0,0" VerticalAlignment="Top" Width="847"/>

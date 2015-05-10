@@ -115,6 +115,8 @@ namespace ch.jaxx.TaskManager.DataAccess
                 if (nextTask.StartDate == null) nextTask.StartDate = DateTime.Now;
                 context.SaveChanges();
                 StartTaskPhase(nextTask);
+                // mark the next task in order
+                MarkNextTask();
                 return nextTask;
             }
             else return null;
