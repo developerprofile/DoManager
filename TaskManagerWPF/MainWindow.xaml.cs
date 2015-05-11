@@ -48,12 +48,14 @@ namespace TaskManagerWPF
         private void AllTasksToListBox()
         {
             var tasks = taskMan.GetAllTasks();
-            listBoxTasks.Items.Clear();
-            
-            foreach (var t in tasks)
-            {
-                listBoxTasks.Items.Add(String.Format("TaskId: {0} \t Created: {1} \t TaskState: {2} \t {3}", t.Id, t.CreationDate, t.State, t.Name));
-            }
+            //listBoxTasks.Items.Clear();
+
+            taskGrid.ItemsSource = tasks;
+
+            //foreach (var t in tasks)
+            //{
+            //    listBoxTasks.Items.Add(String.Format("TaskId: {0} \t Created: {1} \t TaskState: {2} \t {3}", t.Id, t.CreationDate, t.State, t.Name));
+            //}
         }
 
         private void btnStartNextTask_Click(object sender, RoutedEventArgs e)
@@ -95,6 +97,13 @@ namespace TaskManagerWPF
         private void btnLogDuration_Click(object sender, RoutedEventArgs e)
         {
             this.taskMan.LogTaskDurations();
+        }
+
+        private void taskGrid_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var s = sender as DataGrid;
+            var item = s.CurrentItem as TaskModel;
+            tbNextTask.Text = item.Id.ToString() ;
         }
         
     }
