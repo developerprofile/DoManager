@@ -4,16 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="TaskManagerWPF.MainWindow"
         Title="Task Manager" d:DesignWidth="79585" Background="{x:Null}" Icon="pack://siteoforigin:,,,/Resources/TM.ico" Width="1000" Height="520">
     <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
-        <Button x:Name="btnShowAllTasks" Content="Show all tasks" HorizontalAlignment="Left" Height="29" Margin="862,9,0,0" VerticalAlignment="Top" Width="103" Click="btnShowAllTasks_Click"/>
         <Button x:Name="btnMarkNextTask" Content="Mark next task" HorizontalAlignment="Left" Height="29" Margin="862,43,0,0" VerticalAlignment="Top" Width="103" Click="btnMarkNextTask_Click"/>
         <Button x:Name="btnStartNextTask" Content="Start next task" HorizontalAlignment="Left" Height="29" Margin="862,109,0,0" VerticalAlignment="Top" Width="103" Click="btnStartNextTask_Click"/>
         <Button x:Name="btnFinishTask" Content="Finish task" HorizontalAlignment="Left" Height="29" Margin="862,143,0,0" VerticalAlignment="Top" Width="103" Click="btnFinishTask_Click"/>
         <TextBox x:Name="tbNewTask" HorizontalAlignment="Left" Height="25" Margin="126,444,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331"/>
         <Button x:Name="btnCreateTask" Content="Create new task" HorizontalAlignment="Left" Height="25" Margin="10,444,0,0" VerticalAlignment="Top" Width="111" Click="btnCreateTask_Click"/>
         <TextBox x:Name="tbNextTask" HorizontalAlignment="Left" Height="23" Margin="862,77,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="103"/>
-        <Button x:Name="btnOpenDb" Content="Open Db" HorizontalAlignment="Left" Height="29" Margin="862,177,0,0" VerticalAlignment="Top" Width="103" Click="btnOpenDb_Click"/>
+        <Button x:Name="btnOpenDb" Content="Open Db" HorizontalAlignment="Left" Height="29" Margin="862,10,0,0" VerticalAlignment="Top" Width="103" Click="btnOpenDb_Click"/>
         <Button x:Name="btnLogDuration" Content="Log Duration" HorizontalAlignment="Left" Height="29" Margin="862,211,0,0" VerticalAlignment="Top" Width="103" Click="btnLogDuration_Click"/>
-        <DataGrid x:Name="taskGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="429" Width="847" GotFocus="taskGrid_GotFocus"/>
+        <DataGrid x:Name="taskGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="429" Width="847" GotFocus="taskGrid_GotFocus" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FFB25D5D"/>
     </Grid>
 
 
