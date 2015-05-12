@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ch.jaxx.TaskManager.DataAccess;
-using libjfunx.logging; 
+using libjfunx.logging;
+using System.ComponentModel; 
 
 namespace TaskManagerWPF
 {
@@ -46,6 +47,9 @@ namespace TaskManagerWPF
             
 
             taskGrid.ItemsSource = tasks;
+            //taskGrid.Items.SortDescriptions.Clear();
+            //taskGrid.Items.SortDescriptions.Add(new SortDescription("State", ListSortDirection.Descending));
+            //taskGrid.Items.SortDescriptions.Add(new SortDescription("Taskid", ListSortDirection.Descending));
             
             
         }
