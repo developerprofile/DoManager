@@ -92,8 +92,16 @@ namespace TaskManagerWPF
 
         private void btnLogDuration_Click(object sender, RoutedEventArgs e)
         {
-            this.taskMan.LogTaskDurations();
-        }
+            var datePickerText = dtPicker.Text;
+            DateTime parsedDateTime;
+
+            if (DateTime.TryParse(datePickerText,out parsedDateTime))
+            {
+                this.taskMan.LogTaskDurations(parsedDateTime);
+            }
+            else this.taskMan.LogTaskDurations();
+            
+    }
 
         private void taskGrid_GotFocus(object sender, RoutedEventArgs e)
         {

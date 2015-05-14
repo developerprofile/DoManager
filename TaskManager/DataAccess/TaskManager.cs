@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using libjfunx.logging;
+using System.Data.Entity;
 
 namespace ch.jaxx.TaskManager.DataAccess
 {
@@ -222,9 +223,19 @@ namespace ch.jaxx.TaskManager.DataAccess
             return context.Tasks.Where(t => t.State != TaskState.DONE).ToList();            
         }
 
-        public void LogTaskDurations()
+        public void LogTaskDurations(DateTime? Day = null)
         {
-            var doneTasks = context.Tasks.Where(t => t.State == TaskState.DONE).OrderBy(t => t.DoneDate);
+            // select all done tasks
+            var doneTasks = context.Tasks.Where(t => t.State == TaskState.DONE);
+
+            // filter by day if one is provided
+            if (Day.HasValue)
+            {
+                doneTasks = doneTasks.Where(x => DbFunctions.TruncateTime(x.DoneDate.Value) == Day.Value);     
+            }
+
+            // order the tasks by done date
+            doneTasks.OrderBy(t => t.DoneDate);
 
             // foreach task which is done
             foreach (var task in doneTasks)
