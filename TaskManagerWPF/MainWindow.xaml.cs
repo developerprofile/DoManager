@@ -115,6 +115,32 @@ namespace TaskManagerWPF
             taskMan.InterruptCurrentTask(this.tbNewTask.Text);
             AllTasksToListBox();
         }
+
+        private void taskGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if ((e.EditingElement.Parent as DataGridCell).Column.Header.ToString() == "Name")
+            {
+                var editedTaskId = (e.EditingElement.DataContext as TaskModel).Id;
+                var newValue = (e.EditingElement as TextBox).Text;
+
+                taskMan.RenameTask(editedTaskId, newValue);
+            }
+        }
+
+        private void taskGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.IsReadOnly = true; // Makes the column as read only
+            e.Column.CanUserReorder = true;
+            e.Column.CanUserSort = true;            
+           
+            // Name column should be edidtable
+            if (e.Column.Header.ToString() == "Name")
+            {
+                // e.Cancel = true;   // For not to include 
+                e.Column.IsReadOnly = false; // Makes the column as read only
+            }
+
+        }
         
     }
 }

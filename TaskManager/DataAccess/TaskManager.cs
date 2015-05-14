@@ -40,6 +40,21 @@ namespace ch.jaxx.TaskManager.DataAccess
         }
 
         /// <summary>
+        /// Renames the task with the given task id.
+        /// </summary>
+        /// <param name="TaskId"></param>
+        /// <param name="NewTaskName"></param>
+        public void RenameTask(int TaskId, string NewTaskName)
+        {
+            var task = context.Tasks.Find(TaskId);
+            if (task != null)
+            {
+                task.Name = NewTaskName;                
+                context.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// Evaluate the next task and mark it as NEXT
         /// </summary>
         /// <param name="TaskId">If provided the task with this id will become next task. Otherwise the oldest task will be selected
@@ -131,7 +146,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         public void InterruptCurrentTask(string TaskName)
         {
             // to interrupt the active task, there must be an active task
-            if (ActiveTask != null)
+            if (ActiveTask != null && !String.IsNullOrEmpty(TaskName))
             {
                 // Create new task
                 var newTask = CreateQueueTask(TaskName);

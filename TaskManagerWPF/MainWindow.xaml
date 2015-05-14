@@ -16,7 +16,7 @@
         <TextBox x:Name="tbNextTask" HorizontalAlignment="Left" Height="23" Margin="26,76,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="103" Grid.Column="1"/>
         <Button x:Name="btnOpenDb" Content="Open Db" HorizontalAlignment="Left" Height="29" Margin="26,9,0,0" VerticalAlignment="Top" Width="103" Click="btnOpenDb_Click" Grid.Column="1"/>
         <Button x:Name="btnLogDuration" Content="Log Duration" HorizontalAlignment="Left" Height="29" Margin="26,210,0,0" VerticalAlignment="Top" Width="103" Click="btnLogDuration_Click" Grid.Column="1"/>
-        <DataGrid x:Name="taskGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="429" Width="847" GotFocus="taskGrid_GotFocus" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FFB25D5D" AlternatingRowBackground="#FFBAF5FB" IsReadOnly="True" Grid.ColumnSpan="2" ColumnWidth="*"/>
+        <DataGrid x:Name="taskGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="429" Width="847" GotFocus="taskGrid_GotFocus" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FFB25D5D" AlternatingRowBackground="#FFBAF5FB" Grid.ColumnSpan="2" ColumnWidth="*" CellEditEnding="taskGrid_CellEditEnding" AutoGeneratingColumn="taskGrid_AutoGeneratingColumn"/>
         <Button x:Name="btnInterrupt" Content="Interrupt active task" HorizontalAlignment="Left" Margin="723,444,0,0" VerticalAlignment="Top" Width="134" Height="25" Click="btnInterrupt_Click" Grid.ColumnSpan="2"/>
         <DatePicker x:Name="dtPicker" Grid.Column="1" HorizontalAlignment="Left" Margin="26,244,0,0" Width="103" VerticalAlignment="Top"/>
     </Grid>
