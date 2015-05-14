@@ -101,6 +101,12 @@ namespace TaskManagerWPF
             var item = s.CurrentItem as TaskModel;
             tbNextTask.Text = item != null ? item.Id.ToString() : "";
         }
+
+        private void btnInterrupt_Click(object sender, RoutedEventArgs e)
+        {
+            taskMan.InterruptCurrentTask(this.tbNewTask.Text);
+            AllTasksToListBox();
+        }
         
     }
 }

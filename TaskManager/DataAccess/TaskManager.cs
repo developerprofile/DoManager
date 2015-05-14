@@ -24,15 +24,18 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// Adds a new task at the end of the task queue
         /// </summary>
         /// <param name="TaskName">Taskname, task will no be created if taskname is empty</param>
-        public void CreateQueueTask(string TaskName)
+        /// <returns>A task model of the created task, null if no task has been created.</returns>
+        public TaskModel CreateQueueTask(string TaskName)
         {
             // Don't do anything if taskname is not provided
             if (!String.IsNullOrWhiteSpace(TaskName))
             {
-                context.Tasks.Add(new TaskModel() { Name = TaskName, CreationDate = DateTime.Now });
+                var newTask = new TaskModel() { Name = TaskName, CreationDate = DateTime.Now };
+                context.Tasks.Add(newTask);
                 context.SaveChanges();
+                return newTask;
             }
-            
+            return null;
         }
 
         /// <summary>
@@ -42,6 +45,8 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// (if 0 is passed, default = 0)</param>
         /// <returns>Returns th task which has been marked as next and NULL in case the was
         /// no next task found.</returns>
+        /// <remarks>Passing the id of the active task will stop the current task phase and set the active task the next task.
+        /// This is something like a pause funtion. When passing no task id, the active task will never become the next task.</remarks>
         public TaskModel MarkNextTask(int TaskId = 0) 
         {
             // if a next tasks exists, first reset it' state
@@ -50,10 +55,7 @@ namespace ch.jaxx.TaskManager.DataAccess
 
             // find all task which are not done and not active
             var taskList = context.Tasks
-                                .Where(t => t.State != TaskState.DONE)
-                                //.Where(t => t.State != TaskState.ACTIVE) 
-                                // TODO: Once interupt is handled remove comment
-                                // > as long as interupt is not handled we've to keep a chance to reset an active task to NEXT state
+                                .Where(t => t.State != TaskState.DONE)                               
                                 .OrderBy(t => t.CreationDate);
 
             // check if a special task id should become the next task,
@@ -67,9 +69,7 @@ namespace ch.jaxx.TaskManager.DataAccess
             // maybe the given task id was wrong and was not in list,
             // so we'll give taskman a chance to mark the oldest task as next
             if (nextTask == null) nextTask = taskList.Where(t => t.State != TaskState.ACTIVE).FirstOrDefault();
-            // TODO: Once interupt is handled filter ACTIVE state as described some lines above.
-            
-
+          
             // maybe there is no task at all in our list, so return null
             // otherwise make the selected task the next task
             if (nextTask != null)
@@ -101,7 +101,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         }
 
         /// <summary>
-        /// Starts the next task by setting it's start date to now.
+        /// Starts the next task by setting it's start date to now. After starting this function will mark the next task.
         /// </summary>
         /// <returns>Returns the task wich has been started and null, if no task to start was found or there is still 
         /// an unfinished task.</returns>
@@ -122,6 +122,30 @@ namespace ch.jaxx.TaskManager.DataAccess
             else return null;
         }
 
+        /// <summary>
+        /// If there is an active task this method will create a new task and start it. Thi will interrupt the active task immediately.
+        /// The interrupted task will become the new next task.
+        /// </summary>
+        /// <param name="TaskName">Name of new task, if empty nothing will happen.</param>
+        public void InterruptCurrentTask(string TaskName)
+        {
+            // to interrupt the active task, there must be an active task
+            if (ActiveTask != null)
+            {
+                // Create new task
+                var newTask = CreateQueueTask(TaskName);
+                // get active task
+                var interruptedTask = ActiveTask;
+                // Mark ActiveTask as next to interrupt it
+                MarkNextTask(ActiveTask.Id);
+                // Mark the new task as next
+                MarkNextTask(newTask.Id);
+                // Start new task 
+                StartNextTask();
+                // and mark interrupted task as new next task 
+                MarkNextTask(interruptedTask.Id);
+            }
+        }
 
         /// <summary>
         /// Stops the task which is currently markes as ACTIVE.
