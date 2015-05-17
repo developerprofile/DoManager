@@ -21,6 +21,11 @@ namespace ch.jaxx.TaskManager.DataAccess
             this.context = new FirebirdContext(this.connectionString);
         }
 
+        public TaskManager()
+        {
+            this.context = new FirebirdContext();
+        }
+
         /// <summary>
         /// Adds a new task at the end of the task queue
         /// </summary>

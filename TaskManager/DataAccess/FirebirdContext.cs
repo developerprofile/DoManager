@@ -12,6 +12,11 @@ namespace ch.jaxx.TaskManager.DataAccess
             //server type=Embedded;user id=SYSDBA;password=MASTERKEY;dialect=3;character set=UTF8;client library=D:\WORK\Playground\FbTest\FbTest\bin\Debug\fbembed.dll;initial catalog=D:\task.fdb
 		{ }
 
+        public FirebirdContext()
+           : base("name=DoEntities")
+
+        { }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
