@@ -9,7 +9,7 @@ namespace ch.jaxx.TaskManager.DataAccess
     public class TaskManager
     {
         private string connectionString;
-        private FirebirdContext context;
+        private DoDataOperations doDataOps;
 
         /// <summary>
         /// Creates a new instance of TaskManager
@@ -17,13 +17,13 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <param name="ConnectionString"></param>
         public TaskManager(string ConnectionString)
         {
-            this.connectionString = ConnectionString;
-            this.context = new FirebirdContext(this.connectionString);
+            this.connectionString = ConnectionString;            
+            this.doDataOps = new DoDataOperations(this.connectionString);
         }
 
         public TaskManager()
         {
-            this.context = new FirebirdContext();
+            this.doDataOps = new DoDataOperations();
         }
 
         /// <summary>
@@ -33,16 +33,9 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <returns>A task model of the created task, null if no task has been created.</returns>
         public TaskModel CreateQueueTask(string TaskName)
         {
-            // Don't do anything if taskname is not provided
-            if (!String.IsNullOrWhiteSpace(TaskName))
-            {
-                var newTask = new TaskModel() { Name = TaskName, CreationDate = DateTime.Now };
-                context.Tasks.Add(newTask);
-                context.SaveChanges();
-                return newTask;
-            }
-            return null;
+            return doDataOps.CreateTask(TaskName);
         }
+
 
         /// <summary>
         /// Renames the task with the given task id.
@@ -51,12 +44,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <param name="NewTaskName"></param>
         public void RenameTask(int TaskId, string NewTaskName)
         {
-            var task = context.Tasks.Find(TaskId);
-            if (task != null)
-            {
-                task.Name = NewTaskName;                
-                context.SaveChanges();
-            }
+            doDataOps.RenameTask(TaskId, NewTaskName);
         }
 
         /// <summary>
@@ -70,38 +58,39 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// This is something like a pause funtion. When passing no task id, the active task will never become the next task.</remarks>
         public TaskModel MarkNextTask(int TaskId = 0) 
         {
-            // if a next tasks exists, first reset it' state
-            var resetFormerlyNext = context.Tasks.Where(t => t.State == TaskState.NEXT).FirstOrDefault();
-            if (resetFormerlyNext != null) resetFormerlyNext.State = null;
-
-            // find all task which are not done and not active
-            var taskList = context.Tasks
-                                .Where(t => t.State != TaskState.DONE)                               
-                                .OrderBy(t => t.CreationDate);
-
             // check if a special task id should become the next task,
             // otherwise choose the oldest task the next task
             TaskModel nextTask = null;
-            if (TaskId != 0)
+            var task =  doDataOps.GetTaskById(TaskId);
+
+            // if there is task switch and handle its state
+            if (task != null)
             {
-                nextTask = taskList.Where(t => t.Id == TaskId).FirstOrDefault();
+                switch (task.State)
+                {
+                    case null:                        
+                        nextTask = doDataOps.MarkTaskAsNext(task);
+                        break;
+                    case TaskState.ACTIVE:
+                        doDataOps.EndTaskPhase(task);                       
+                        nextTask = doDataOps.MarkTaskAsNext(task);
+                        break;
+                    case TaskState.NEXT:
+                        nextTask = task;
+                        break;
+                    case TaskState.DONE:
+                    default:
+                        break;
+                }
             }
-            // Is nextTask still null? So TaskId is 0 or
-            // maybe the given task id was wrong and was not in list,
-            // so we'll give taskman a chance to mark the oldest task as next
-            if (nextTask == null) nextTask = taskList.Where(t => t.State != TaskState.ACTIVE).FirstOrDefault();
-          
-            // maybe there is no task at all in our list, so return null
-            // otherwise make the selected task the next task
-            if (nextTask != null)
+            //else try to mark the oldest task
+            else
             {
-                // if next task is the active one, pause it
-                if (nextTask.State == TaskState.ACTIVE) EndTaskPhase(ActiveTask);
-                nextTask.State = TaskState.NEXT;
-                context.SaveChanges();
-                return nextTask;
+                var oldestTask = doDataOps.OldestOpenTask;
+                nextTask = doDataOps.MarkTaskAsNext(oldestTask);
             }
-            else return null;
+ 
+            return nextTask;
         }
 
         /// <summary>
@@ -128,16 +117,13 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// an unfinished task.</returns>
         public TaskModel StartNextTask()
         {
-            if (ActiveTask != null) return null;
-            var nextTask = context.Tasks.Where(t => t.State == TaskState.NEXT).FirstOrDefault();
+            if (doDataOps.ActiveTask != null) return null;
+            var nextTask = doDataOps.NextTask;
             if (nextTask != null)
             {
-                nextTask.State = TaskState.ACTIVE;
-                if (nextTask.StartDate == null) nextTask.StartDate = DateTime.Now;
-                context.SaveChanges();
-                StartTaskPhase(nextTask);
-                // mark the next task in order
-                MarkNextTask();
+                doDataOps.StartTask(nextTask);
+                doDataOps.StartTaskPhase(nextTask);
+                doDataOps.MarkTaskAsNext(doDataOps.OldestOpenTask);
                 return nextTask;
             }
             else return null;
@@ -150,21 +136,28 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <param name="TaskName">Name of new task, if empty nothing will happen.</param>
         public void InterruptCurrentTask(string TaskName)
         {
+            var interruptedTask = doDataOps.ActiveTask;
             // to interrupt the active task, there must be an active task
-            if (ActiveTask != null && !String.IsNullOrEmpty(TaskName))
+            if (interruptedTask!= null && !String.IsNullOrEmpty(TaskName))
             {
                 // Create new task
                 var newTask = CreateQueueTask(TaskName);
-                // get active task
-                var interruptedTask = ActiveTask;
-                // Mark ActiveTask as next to interrupt it
-                MarkNextTask(ActiveTask.Id);
-                // Mark the new task as next
-                MarkNextTask(newTask.Id);
-                // Start new task 
-                StartNextTask();
+
+                // Stop the current active task phase
+                doDataOps.EndTaskPhase(interruptedTask);
+                // Stop the current active task
+                doDataOps.StopTask(interruptedTask);
+                
+                // Mark new task next as next to interrupt it
+                doDataOps.MarkTaskAsNext(newTask);
+                // Start the next task
+                doDataOps.StartTask(newTask);
+                // Start new task phase
+                doDataOps.StartTaskPhase(newTask);
+                
                 // and mark interrupted task as new next task 
-                MarkNextTask(interruptedTask.Id);
+                doDataOps.MarkTaskAsNext(interruptedTask);
+
             }
         }
 
@@ -174,105 +167,25 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <returns>Returns the finished task, and NULL in case no active task was found.</returns>
         public TaskModel FinishCurrentTask()
         {
-            var finishedTask = ActiveTask;
+            var finishedTask = doDataOps.ActiveTask;
             if (finishedTask != null)
             {
-                EndTaskPhase(finishedTask);
-
-                finishedTask.State = TaskState.DONE;
-                finishedTask.DoneDate = DateTime.Now;
-                context.SaveChanges();
+                doDataOps.EndTaskPhase(finishedTask);
+                doDataOps.StopAndEndTask(finishedTask);
                 return finishedTask;
             }
             else return null;
         }
 
 
-        /// <summary>
-        /// Gets the active task, null if no task is active.
-        /// </summary>
-        public TaskModel ActiveTask
-        {
-            get 
-            {
-                var activeTask = context.Tasks.Where(t => t.State == TaskState.ACTIVE).FirstOrDefault();
-                if (activeTask != null)
-                {
-                    return activeTask;
-                }
-                else return null;
-            }
-
-        }
-
-        /// <summary>
-        /// Creates a new phase for the given task.
-        /// </summary>
-        /// <param name="OwnerTask"></param>
-        private void StartTaskPhase(TaskModel OwnerTask)
-        {
-            var taskPhase = new TaskPhaseModel()
-            {
-                TaskId = OwnerTask.Id,
-                StartDate = DateTime.Now
-            };
-
-            context.TaskPhases.Add(taskPhase);
-            context.SaveChanges();
-            Logger.Log(LogEintragTyp.Debug, "Start new task phase for taskid " + OwnerTask.Id);
-        }
-
-        /// <summary>
-        /// Ends the active task phase of the owner task
-        /// </summary>
-        /// <param name="OwnerTask"></param>
-        private void EndTaskPhase(TaskModel OwnerTask)
-        {
-            var lastTaskPhase = context.TaskPhases.Where(p => p.TaskId == OwnerTask.Id)
-                .Where(p => p.EndDate == null).FirstOrDefault();
-
-            lastTaskPhase.EndDate = DateTime.Now;
-            context.SaveChanges();
-            Logger.Log(LogEintragTyp.Debug, "End task phase for taskid " + OwnerTask.Id);
-
-            
-        }
-
         public List<TaskModel> GetAllTasks()
         {
-            return context.Tasks.Where(t => t.State != TaskState.DONE).ToList();            
+            return doDataOps.GetAllTasks;
         }
 
         public void LogTaskDurations(DateTime? Day = null)
         {
-            // select all done tasks
-            var doneTasks = context.Tasks.Where(t => t.State == TaskState.DONE);
-
-            // filter by day if one is provided
-            if (Day.HasValue)
-            {
-                doneTasks = doneTasks.Where(x => DbFunctions.TruncateTime(x.DoneDate.Value) == Day.Value);     
-            }
-
-            // order the tasks by done date
-            doneTasks.OrderBy(t => t.DoneDate);
-
-            // foreach task which is done
-            foreach (var task in doneTasks)
-            {
-                var taskDuration = new TimeSpan();
-                var phases = context.TaskPhases.Where(p => p.TaskId == task.Id);
-                                
-                // foreach phase of this task
-                foreach (var phase in phases)
-                {
-                    var phaseduration = phase.EndDate.Value - phase.StartDate.Value;
-                    taskDuration = taskDuration.Add(phaseduration);
-                }
-
-                Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskDoneDate: {1} |  Duration {2} | Task: {0}", task.Name, task.DoneDate, taskDuration.ToString()));
-            }
-
+            doDataOps.LogTaskDurations(Day);
         }
     }
 }

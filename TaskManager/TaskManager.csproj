@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\DoDataOperations.cs" />
     <Compile Include="DataAccess\FirebirdContext.cs" />
     <Compile Include="DataAccess\FirebirdContextConfiguration.cs" />
     <Compile Include="DataAccess\TaskManager.cs" />
