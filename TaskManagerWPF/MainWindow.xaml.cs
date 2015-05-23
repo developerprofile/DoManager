@@ -117,6 +117,8 @@ namespace TaskManagerWPF
         private void btnInterrupt_Click(object sender, RoutedEventArgs e)
         {
             taskMan.InterruptCurrentTask(this.tbNewTask.Text);
+            // Clear text field (DOMA-8)
+            this.tbNewTask.Text = "";
             AllTasksToListBox();
         }
 
