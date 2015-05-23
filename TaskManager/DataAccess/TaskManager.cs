@@ -33,7 +33,16 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <returns>A task model of the created task, null if no task has been created.</returns>
         public TaskModel CreateQueueTask(string TaskName)
         {
-            return doDataOps.CreateTask(TaskName);
+            var newTask = doDataOps.CreateTask(TaskName);
+
+            // if new task is also the oldest one, then it's the only one!
+            // Make it next! (DOMA-7)
+            if (newTask.Id ==  doDataOps.OldestOpenTask.Id)
+            {
+                doDataOps.MarkTaskAsNext(newTask);
+            }
+
+            return newTask;
         }
 
 
