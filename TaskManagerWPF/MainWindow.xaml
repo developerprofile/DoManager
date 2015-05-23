@@ -3,6 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="TaskManagerWPF.MainWindow"
         Title="Task Manager" d:DesignWidth="79585" Background="{x:Null}" Icon="pack://siteoforigin:,,,/Resources/TM.ico" Width="1000" Height="520">
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
+
+    <Window.Resources>
+        <DrawingImage x:Key="OverlayImage">
+            <DrawingImage.Drawing>
+                <ImageDrawing ImageSource="clock.png"
+                          Rect="0,0,16,16" />
+            </DrawingImage.Drawing>
+        </DrawingImage>
+    </Window.Resources>
     <Grid Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="853*"/>

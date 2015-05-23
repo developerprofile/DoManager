@@ -26,7 +26,7 @@ namespace TaskManagerWPF
         public MainWindow()
         {
             InitializeComponent();
-            Logger.SetLogger(new ReflectingFileLogger(Properties.Settings.Default.Logfile,LogEintragTyp.Debug));
+            Logger.SetLogger(new ReflectingFileLogger(Properties.Settings.Default.Logfile,LogEintragTyp.Debug));            
         }
 
         
@@ -37,6 +37,7 @@ namespace TaskManagerWPF
         {  
             taskMan.MarkNextTask(tbNextTask.Text);
             tbNextTask.Text = "";
+            SetTaskBarIconPaused();
             AllTasksToListBox();
 
         }
@@ -44,25 +45,20 @@ namespace TaskManagerWPF
         private void AllTasksToListBox()
         {
             var tasks = taskMan.GetAllTasks();
-            
-
-            taskGrid.ItemsSource = tasks;
-            //taskGrid.Items.SortDescriptions.Clear();
-            //taskGrid.Items.SortDescriptions.Add(new SortDescription("State", ListSortDirection.Descending));
-            //taskGrid.Items.SortDescriptions.Add(new SortDescription("Taskid", ListSortDirection.Descending));
-            
-            
+            taskGrid.ItemsSource = tasks;        
         }
 
         private void btnStartNextTask_Click(object sender, RoutedEventArgs e)
         {
             taskMan.StartNextTask();
+            SetTaskBarIconActive();
             AllTasksToListBox();
         }
 
         private void btnFinishTask_Click(object sender, RoutedEventArgs e)
         {
             taskMan.FinishCurrentTask();
+            SetTaskBarIconPaused();
             AllTasksToListBox();
         }
 
@@ -89,6 +85,12 @@ namespace TaskManagerWPF
                 this.Title = this.Title + " - " + openDialog.FileName;
 
                 AllTasksToListBox();
+
+                if (this.taskMan.HasActiveTask)
+                {
+                    SetTaskBarIconActive();
+                }
+                else SetTaskBarIconPaused();
             }
 
             
@@ -146,6 +148,20 @@ namespace TaskManagerWPF
                 e.Column.IsReadOnly = false; // Makes the column as read only
             }
 
+        }
+
+        private void SetTaskBarIconActive()
+        {
+            this.TaskbarItemInfo.Overlay = (ImageSource)Resources["OverlayImage"];
+            this.TaskbarItemInfo.ProgressValue = 100;
+            this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal; 
+        }
+
+        private void SetTaskBarIconPaused()
+        {
+            this.TaskbarItemInfo.Overlay = null;
+            this.TaskbarItemInfo.ProgressValue = 100;
+            this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
         }
         
     }

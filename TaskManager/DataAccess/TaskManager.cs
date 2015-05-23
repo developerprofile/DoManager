@@ -199,5 +199,16 @@ namespace ch.jaxx.TaskManager.DataAccess
         {
             doDataOps.LogTaskDurations(Day);
         }
+
+        /// <summary>
+        /// Gets an indicator, wether the current task list has an active task.
+        /// </summary>
+        public bool HasActiveTask
+        {
+            get
+            {
+                return doDataOps.ActiveTask != null;
+            }
+        }
     }
 }
