@@ -223,11 +223,14 @@ namespace ch.jaxx.TaskManager.DataAccess
             else return null;
         }
 
+        /// <summary>
+        /// Gets all tasks not done
+        /// </summary>
         internal List<TaskModel> GetAllTasks
         {
             get
             {
-                return context.Tasks.Where(t => t.State != TaskState.DONE).OrderByDescending(t => t.CreationDate).ToList();
+                return context.Tasks.Where(t => t.State != TaskState.DONE).OrderBy(t => t.CreationDate).ToList();
             }
         }
 

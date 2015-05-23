@@ -186,7 +186,10 @@ namespace ch.jaxx.TaskManager.DataAccess
             else return null;
         }
 
-
+        /// <summary>
+        /// Gets all tasks not done.
+        /// </summary>
+        /// <returns></returns>
         public List<TaskModel> GetAllTasks()
         {
             return doDataOps.GetAllTasks;
