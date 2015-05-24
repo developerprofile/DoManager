@@ -44,8 +44,20 @@ namespace TaskManagerWPF
 
         private void AllTasksToListBox()
         {
+            // We have to ensure the persistence of column order and width (DOMA-6)
+            // if there is already something in the grid save column order and width
+            if (taskGrid.Columns.Count > 0)
+            {
+                ColumnOrder.SaveColumnOrder(taskGrid);
+            }
+            
+            // Load or reload the tasks
             var tasks = taskMan.GetAllTasks();
-            taskGrid.ItemsSource = tasks;        
+            taskGrid.ItemsSource = tasks;
+
+            // Reset column order and with if persisted before
+            ColumnOrder.SetColumnOrder(taskGrid);
+            
         }
 
         private void btnStartNextTask_Click(object sender, RoutedEventArgs e)
