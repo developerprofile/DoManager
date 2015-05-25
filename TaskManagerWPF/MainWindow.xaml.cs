@@ -175,6 +175,31 @@ namespace TaskManagerWPF
             this.TaskbarItemInfo.ProgressValue = 100;
             this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            // check for active task before closing the application (DOMA-10)
+            if (taskMan.HasActiveTask)
+            {
+                MessageBoxResult result = MessageBox.Show("There is an active task.\r\n Do you really want to close the application?",
+                  "Confirmation", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Yes code here
+                    e.Cancel = false;
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    // No code here
+                    e.Cancel = true;
+                }
+                else
+                {
+                    // Cancel code here
+                    e.Cancel = true;
+                }
+            }
+        }
         
     }
 }
