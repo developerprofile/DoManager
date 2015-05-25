@@ -121,7 +121,8 @@ xcopy /Y "$(SolutionDir)TaskManager\icudt30.dll" "$(TargetDir)"
 xcopy /Y "$(SolutionDir)TaskManager\icuin30.dll" "$(TargetDir)"
 xcopy /Y "$(SolutionDir)TaskManager\icuuc30.dll" "$(TargetDir)"
 xcopy /Y "$(SolutionDir)\TaskManager\bin\Debug\EntityFramework.SqlServer.dll"
-xcopy /Y "$(SolutionDir)\TaskManager\bin\Debug\EntityFramework.Firebird.dll"</PreBuildEvent>
+xcopy /Y "$(SolutionDir)\TaskManager\bin\Debug\EntityFramework.Firebird.dll"
+xcopy /Y "$(SolutionDir)\TaskManager\bin\Debug\MySql.Data.Entity.EF6.dll"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
