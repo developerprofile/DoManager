@@ -179,7 +179,7 @@ namespace TaskManagerWPF
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             // check for active task before closing the application (DOMA-10)
-            if (taskMan.HasActiveTask)
+            if (taskMan != null && taskMan.HasActiveTask)
             {
                 MessageBoxResult result = MessageBox.Show("There is an active task.\r\n Do you really want to close the application?",
                   "Confirmation", MessageBoxButton.YesNo);
