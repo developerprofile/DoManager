@@ -243,6 +243,7 @@ namespace ch.jaxx.TaskManager.DataAccess
             if (Day.HasValue)
             {
                 doneTasks = doneTasks.Where(x => DbFunctions.TruncateTime(x.DoneDate.Value) == Day.Value);
+                LogTaskPhaseDuration(Day.Value);
             }
 
             // order the tasks by done date
@@ -263,7 +264,40 @@ namespace ch.jaxx.TaskManager.DataAccess
 
                 Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskDoneDate: {1} |  Duration {2} | Task: {0}", task.Name, task.DoneDate, taskDuration.ToString()));
             }
+            
 
+        }
+
+        private void LogTaskPhaseDuration(DateTime Day)
+        {
+
+            // Get phases for a date
+            var phases = context.TaskPhases.Where(p => DbFunctions.TruncateTime(p.EndDate.Value) == Day);
+            // Get tasks for this phases
+            var tasks = context.Tasks.Where(t => phases.Select(p => p.TaskId).Contains(t.Id));
+
+            // Iterate throught these task and sum the phases
+            foreach(var task in tasks)
+            {
+                var taskDuration = new TimeSpan();
+                // Get phases for this dedicated task
+                var taskPhases = phases.Where(p => p.TaskId == task.Id);
+                // Iterate through the phases of this task and add the phase duration to the taskDuration
+                foreach (var phase in taskPhases)
+                {
+                    var phaseDuration = phase.EndDate.Value - phase.StartDate.Value;
+                    taskDuration = taskDuration.Add(phaseDuration);
+                }
+
+                // Log the duration of this task
+
+                Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskPhasesDate: {0} |  Duration {1} | Task: {2}", Day, taskDuration.ToString(), task.Name));
+
+            }
+               
+            
+
+            
         }
     }
 }
