@@ -75,10 +75,14 @@ namespace TaskManagerWPF
         }
 
         private void btnCreateTask_Click(object sender, RoutedEventArgs e)
-        {            
-            taskMan.CreateQueueTask(tbNewTask.Text);
-            tbNewTask.Text = "";
-            AllTasksToListBox();
+        {
+            // DOMA-12: don't create a new task is text box is emtpy
+            if (!String.IsNullOrWhiteSpace(tbNewTask.Text))
+            {
+                taskMan.CreateQueueTask(tbNewTask.Text);
+                tbNewTask.Text = "";
+                AllTasksToListBox();
+            }
         }
 
         private void btnOpenDb_Click(object sender, RoutedEventArgs e)
