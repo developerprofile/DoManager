@@ -33,7 +33,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <returns>A task model of the created task, null if no task has been created.</returns>
         public TaskModel CreateQueueTask(string TaskName)
         {
-            var newTask = doDataOps.CreateTask(TaskName);
+            var newTask = doDataOps.CreateTaskNow(TaskName);
 
             // if new task is also the oldest one, then it's the only one!
             // Make it next! (DOMA-7)
@@ -81,7 +81,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
                     case TaskState.ACTIVE:
-                        doDataOps.EndTaskPhase(task);                       
+                        doDataOps.EndTaskPhaseNow(task);                       
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
                     case TaskState.NEXT:
@@ -130,8 +130,8 @@ namespace ch.jaxx.TaskManager.DataAccess
             var nextTask = doDataOps.NextTask;
             if (nextTask != null)
             {
-                doDataOps.StartTask(nextTask);
-                doDataOps.StartTaskPhase(nextTask);
+                doDataOps.StartTaskNow(nextTask);
+                doDataOps.StartTaskPhaseNow(nextTask);
                 doDataOps.MarkTaskAsNext(doDataOps.OldestOpenTask);
                 return nextTask;
             }
@@ -153,16 +153,16 @@ namespace ch.jaxx.TaskManager.DataAccess
                 var newTask = CreateQueueTask(TaskName);
 
                 // Stop the current active task phase
-                doDataOps.EndTaskPhase(interruptedTask);
+                doDataOps.EndTaskPhaseNow(interruptedTask);
                 // Stop the current active task
                 doDataOps.StopTask(interruptedTask);
                 
                 // Mark new task next as next to interrupt it
                 doDataOps.MarkTaskAsNext(newTask);
                 // Start the next task
-                doDataOps.StartTask(newTask);
+                doDataOps.StartTaskNow(newTask);
                 // Start new task phase
-                doDataOps.StartTaskPhase(newTask);
+                doDataOps.StartTaskPhaseNow(newTask);
                 
                 // and mark interrupted task as new next task 
                 doDataOps.MarkTaskAsNext(interruptedTask);
@@ -179,8 +179,8 @@ namespace ch.jaxx.TaskManager.DataAccess
             var finishedTask = doDataOps.ActiveTask;
             if (finishedTask != null)
             {
-                doDataOps.EndTaskPhase(finishedTask);
-                doDataOps.StopAndEndTask(finishedTask);
+                doDataOps.EndTaskPhaseNow(finishedTask);
+                doDataOps.StopAndEndTaskNow(finishedTask);
                 return finishedTask;
             }
             else return null;

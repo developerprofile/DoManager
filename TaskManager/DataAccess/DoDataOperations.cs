@@ -30,18 +30,29 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// Add a new task.
         /// </summary>
         /// <param name="TaskName">Taskname, task will no be created if taskname is empty</param>
+        /// <param name="CreationDate">The DateTime when the task was created.</param>
         /// <returns>A task model of the created task, null if no task has been created.</returns>
-        public TaskModel CreateTask(string Taskname)
+        public TaskModel CreateTask(string Taskname, DateTime CreationDate)
         {
             // Don't do anything if taskname is not provided
             if (!String.IsNullOrWhiteSpace(Taskname))
             {
-                var newTask = new TaskModel() { Name = Taskname, CreationDate = DateTime.Now };
+                var newTask = new TaskModel() { Name = Taskname, CreationDate = CreationDate };
                 context.Tasks.Add(newTask);
                 context.SaveChanges();
                 return newTask;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Method to create a new task right now (using CreateTask method.)
+        /// </summary>
+        /// <param name="Taskname">Taskname, task will not be created if emtpy</param>
+        /// <returns></returns>
+        public TaskModel CreateTaskNow(string Taskname)
+        {
+            return CreateTask(Taskname, DateTime.Now);
         }
 
 
@@ -91,12 +102,22 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// Start a task.
         /// </summary>
         /// <param name="TaskToStart"></param>
-        internal void StartTask(TaskModel TaskToStart)
+        /// <param name="TaskStartDate">Start date of task</param>
+        internal void StartTask(TaskModel TaskToStart, DateTime TaskStartDate)
         {
             var task = context.Tasks.Find(TaskToStart.Id);
-            if (task.StartDate == null) task.StartDate = DateTime.Now;
+            if (task.StartDate == null) task.StartDate = TaskStartDate;
             task.State = TaskState.ACTIVE;
             context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Start a task right now (using the StartTask method.)
+        /// </summary>
+        /// <param name="TaskToStart"></param>
+        public void StartTaskNow(TaskModel TaskToStart)
+        {
+            StartTask(TaskToStart, DateTime.Now);
         }
 
         /// <summary>
@@ -115,12 +136,22 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// an end date.
         /// </summary>
         /// <param name="TaskToStop"></param>
-        internal void StopAndEndTask(TaskModel TaskToStop)
+        /// <param name="DoneDate">Task done date.</param>
+        internal void StopAndEndTask(TaskModel TaskToStop, DateTime DoneDate)
         {
             var task = context.Tasks.Find(TaskToStop.Id);
             task.State = TaskState.DONE;
-            task.DoneDate = DateTime.Now;
+            task.DoneDate = DoneDate;
             context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Stop and end a task right now (using the StopAndEndTask method).
+        /// </summary>
+        /// <param name="TaskToStop"></param>
+        public void StopAndEndTaskNow(TaskModel TaskToStop)
+        {
+            StopAndEndTask(TaskToStop, DateTime.Now);
         }
 
 
@@ -128,12 +159,13 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// Creates a new phase for the given task.
         /// </summary>
         /// <param name="OwnerTask"></param>
-        internal void StartTaskPhase(TaskModel OwnerTask)
+        /// <param name="PhaseStartDate">Start date of task phase</param>
+        internal void StartTaskPhase(TaskModel OwnerTask, DateTime PhaseStartDate)
         {
             var taskPhase = new TaskPhaseModel()
             {
                 TaskId = OwnerTask.Id,
-                StartDate = DateTime.Now
+                StartDate = PhaseStartDate
             };
 
             context.TaskPhases.Add(taskPhase);
@@ -142,19 +174,36 @@ namespace ch.jaxx.TaskManager.DataAccess
         }
 
         /// <summary>
+        /// Start a task phase right now (using the StartTaskPhase method).
+        /// </summary>
+        /// <param name="OwnerTask"></param>
+        public void StartTaskPhaseNow(TaskModel OwnerTask)
+        {
+            StartTaskPhase(OwnerTask, DateTime.Now);
+        }
+
+        /// <summary>
         /// Ends the active task phase of the owner task
         /// </summary>
         /// <param name="OwnerTask"></param>
-        internal void EndTaskPhase(TaskModel OwnerTask)
+        /// <param name="PhaseEndDate">Task phase end</param>
+        internal void EndTaskPhase(TaskModel OwnerTask, DateTime PhaseEndDate)
         {
             var lastTaskPhase = context.TaskPhases.Where(p => p.TaskId == OwnerTask.Id)
                 .Where(p => p.EndDate == null).FirstOrDefault();
 
-            lastTaskPhase.EndDate = DateTime.Now;
+            lastTaskPhase.EndDate = PhaseEndDate;
             context.SaveChanges();
             Logger.Log(LogEintragTyp.Debug, "End task phase for taskid " + OwnerTask.Id);
+        }
 
-
+        /// <summary>
+        /// Ends the acitve task phase right now (using EndTaskPhase method).
+        /// </summary>
+        /// <param name="OwnerTask"></param>
+        public void EndTaskPhaseNow(TaskModel OwnerTask)
+        {
+            EndTaskPhase(OwnerTask, DateTime.Now);
         }
 
         /// <summary>
