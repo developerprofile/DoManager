@@ -53,5 +53,18 @@ namespace ch.jaxx.TaskManager.DataAccess
             }
             return duration;
         }
+
+        /// <summary>
+        /// Calculates the sum of all durations in the given ITaskPhase List but filters the liste between the two given dates.
+        /// </summary>
+        /// <param name="TaskPhasesList"></param>
+        /// <param name="FromDate"></param>
+        /// <param name="ToDate"></param>
+        /// <returns></returns>
+        public TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList, DateTime FromDate, DateTime ToDate)
+        {
+            var filteredList = TaskPhasesList.Where(p => p.EndDate.Value >= FromDate && p.EndDate < ToDate).ToList<ITaskPhase>();
+            return GetTaskPhasesDuration(filteredList);            
+        }
     }
 }

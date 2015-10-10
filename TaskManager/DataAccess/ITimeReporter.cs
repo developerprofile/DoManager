@@ -26,6 +26,15 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// </summary>
         /// <param name="TaskPhasesList"></param>
         /// <returns></returns>
-        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList);        
+        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList);
+
+        /// <summary>
+        /// Calculates the sum of all durations in the given ITaskPhase List but filters the liste between the two given dates.
+        /// </summary>
+        /// <param name="TaskPhasesList"></param>
+        /// <param name="FromDate"></param>
+        /// <param name="ToDate"></param>
+        /// <returns></returns>
+        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList, DateTime FromDate, DateTime ToDate);
     }
 }

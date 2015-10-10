@@ -10,6 +10,7 @@ namespace ch.jaxx.TaskManager.DataAccess
     {
         private string connectionString;
         private FirebirdContext context;
+        private ITimeReporter timeReporter;
 
         /// <summary>
         /// Creates a new instance of DoDataaOperations
@@ -296,23 +297,23 @@ namespace ch.jaxx.TaskManager.DataAccess
             }
 
             // order the tasks by done date
-            doneTasks.OrderBy(t => t.DoneDate);
+            //doneTasks.OrderBy(t => t.DoneDate);
 
-            // foreach task which is done
-            foreach (var task in doneTasks)
-            {
-                var taskDuration = new TimeSpan();
-                var phases = context.TaskPhases.Where(p => p.TaskId == task.Id);
+            //// foreach task which is done
+            //foreach (var task in doneTasks)
+            //{
+            //    var taskDuration = new TimeSpan();
+            //    var phases = context.TaskPhases.Where(p => p.TaskId == task.Id);
 
-                // foreach phase of this task
-                foreach (var phase in phases)
-                {
-                    var phaseduration = phase.EndDate.Value - phase.StartDate.Value;
-                    taskDuration = taskDuration.Add(phaseduration);
-                }
+            //    // foreach phase of this task
+            //    foreach (var phase in phases)
+            //    {
+            //        var phaseduration = phase.EndDate.Value - phase.StartDate.Value;
+            //        taskDuration = taskDuration.Add(phaseduration);
+            //    }
 
-                Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskDoneDate: {1} |  Duration {2} | Task: {0}", task.Name, task.DoneDate, taskDuration.ToString()));
-            }
+            //    Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskDoneDate: {1} |  Duration {2} | Task: {0}", task.Name, task.DoneDate, taskDuration.ToString()));
+            //}
             
 
         }
@@ -321,7 +322,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         {
 
             // Get phases for a date
-            var phases = context.TaskPhases.Where(p => DbFunctions.TruncateTime(p.EndDate.Value) == Day);
+            var phases = context.TaskPhases;
             // Get tasks for this phases
             var tasks = context.Tasks.Where(t => phases.Select(p => p.TaskId).Contains(t.Id));
 
@@ -330,13 +331,9 @@ namespace ch.jaxx.TaskManager.DataAccess
             {
                 var taskDuration = new TimeSpan();
                 // Get phases for this dedicated task
-                var taskPhases = phases.Where(p => p.TaskId == task.Id);
-                // Iterate through the phases of this task and add the phase duration to the taskDuration
-                foreach (var phase in taskPhases)
-                {
-                    var phaseDuration = phase.EndDate.Value - phase.StartDate.Value;
-                    taskDuration = taskDuration.Add(phaseDuration);
-                }
+                var taskPhases = phases.Where(p => p.TaskId == task.Id).ToList<ITaskPhase>();
+                taskDuration= timeReporter.GetTaskPhasesDuration(taskPhases, Day, Day + new TimeSpan(1,0,0,0));
+                
 
                 // Log the duration of this task
 
