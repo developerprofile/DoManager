@@ -12,6 +12,7 @@ namespace TaskManagerUnitTests
     [TestFixture]
     class TimeReporterTest
     {
+
         [TestCase]        
         public void A01_GetTaskDurationTest()
         {
@@ -36,6 +37,47 @@ namespace TaskManagerUnitTests
 
             Assert.AreEqual(expectedDuration, actualDuration);
             
+        }
+
+        [TestCase]
+        public void A02_GetSumTaskDurationTest()
+        {
+            
+            ITaskPhase phaseOne = new TaskPhaseModel()
+            {
+                Id = 1,
+                TaskId = 1,
+                StartDate = new DateTime(2015, 10, 1, 00, 00, 00),
+                EndDate = new DateTime(2015, 10, 1, 01, 00, 00)
+            };
+
+            ITaskPhase phaseTwo = new TaskPhaseModel()
+            {
+                Id = 2,
+                TaskId = 1,
+                StartDate = new DateTime(2015, 10, 1, 03, 00, 00),
+                EndDate = new DateTime(2015, 10, 1, 03, 30, 00)
+            };
+
+            ITaskPhase phaseThree = new TaskPhaseModel()
+            {
+                Id = 3,
+                TaskId = 1,
+                StartDate = new DateTime(2015, 10, 1, 05, 00, 00),
+                EndDate = new DateTime(2015, 10, 1, 05, 10, 20)
+            };
+
+            var taskPhaseList = new List<ITaskPhase>();
+            taskPhaseList.Add(phaseOne);
+            taskPhaseList.Add(phaseTwo);
+            taskPhaseList.Add(phaseThree);
+
+            var expectedDuration = new TimeSpan(1, 40, 20);
+
+            ITimeReporter reporter = new TimeReporter();
+            var actualDuration = reporter.GetTaskPhasesDuration(taskPhaseList);
+
+            Assert.AreEqual(expectedDuration, actualDuration);
         }
     }
 }
