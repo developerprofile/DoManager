@@ -75,6 +75,7 @@
     <Compile Include="DataAccess\DoDataOperations.cs" />
     <Compile Include="DataAccess\FirebirdContext.cs" />
     <Compile Include="DataAccess\FirebirdContextConfiguration.cs" />
+    <Compile Include="DataAccess\ITaskPhase.cs" />
     <Compile Include="DataAccess\ITimeReporter.cs" />
     <Compile Include="DataAccess\TaskManager.cs" />
     <Compile Include="DataAccess\TaskModel.cs" />
