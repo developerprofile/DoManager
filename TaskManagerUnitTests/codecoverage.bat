@@ -1,0 +1,2 @@
+..\..\..\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe -target:runtest.bat -register:user -filter:+[TaskManager*]*
+..\..\..\packages\ReportGenerator.2.3.2.0\tools\reportgenerator.exe -reports:results.xml -targetdir:coverage  
