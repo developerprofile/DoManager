@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ch.jaxx.TaskManager.DataAccess
 {
     [Table("TASKS")]
-    public class TaskModel
+    public class TaskModel : ITask
     {
         [Key]
         [Column("ID")]

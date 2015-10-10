@@ -75,12 +75,15 @@
     <Compile Include="DataAccess\DoDataOperations.cs" />
     <Compile Include="DataAccess\FirebirdContext.cs" />
     <Compile Include="DataAccess\FirebirdContextConfiguration.cs" />
+    <Compile Include="DataAccess\ITimeReporter.cs" />
     <Compile Include="DataAccess\TaskManager.cs" />
     <Compile Include="DataAccess\TaskModel.cs" />
     <Compile Include="DataAccess\TaskPhaseModel.cs" />
     <Compile Include="DataAccess\TaskState.cs" />
+    <Compile Include="DataAccess\TimeReporter.cs" />
     <Compile Include="DbMigration\DbMigrator.cs" />
     <Compile Include="DbMigration\DbVersionModel.cs" />
+    <Compile Include="DataAccess\ITask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
