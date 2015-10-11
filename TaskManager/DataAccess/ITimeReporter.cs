@@ -36,7 +36,6 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <param name="FromDate"></param>
         /// <param name="ToDate"></param>
         /// <returns></returns>
-        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList, DateTime? FromDate, DateTime? ToDate);
-        
+        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList, DateTime? FromDate, DateTime? ToDate);        
     }
 }

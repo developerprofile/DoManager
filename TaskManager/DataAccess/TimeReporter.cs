@@ -71,6 +71,6 @@ namespace ch.jaxx.TaskManager.DataAccess
             }
             else filteredList = TaskPhasesList;
             return GetTaskPhasesDuration(filteredList);            
-        }
+        }       
     }
 }
