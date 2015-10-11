@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using libjfunx.logging;
 using System.Data.Entity;
+using Autofac;
 
 namespace ch.jaxx.TaskManager.DataAccess
 {
     public class DoDataOperations
     {
         private string connectionString;
-        private FirebirdContext context;
-        private ITimeReporter timeReporter;
+        private FirebirdContext context;        
+        private static IContainer Container { get; set; }
 
         /// <summary>
         /// Creates a new instance of DoDataaOperations
         /// </summary>
         /// <param name="ConnectionString"></param>
-        public DoDataOperations(string ConnectionString)
+        public DoDataOperations(string ConnectionString, IContainer IoCContainer)
         {
             this.connectionString = ConnectionString;
             this.context = new FirebirdContext(this.connectionString);
+            Container = IoCContainer;
         }
 
         public DoDataOperations()
@@ -287,12 +289,12 @@ namespace ch.jaxx.TaskManager.DataAccess
         internal void LogTaskDurations(DateTime? Day = null)
         {
             // select all done tasks
-            var doneTasks = context.Tasks.Where(t => t.State == TaskState.DONE);
+           // var doneTasks = context.Tasks.Where(t => t.State == TaskState.DONE);
 
             // filter by day if one is provided
             if (Day.HasValue)
             {
-                doneTasks = doneTasks.Where(x => DbFunctions.TruncateTime(x.DoneDate.Value) == Day.Value);
+               // doneTasks = doneTasks.Where(x => DbFunctions.TruncateTime(x.DoneDate.Value) == Day.Value);
                 LogTaskPhaseDuration(Day.Value);
             }
 
@@ -320,25 +322,34 @@ namespace ch.jaxx.TaskManager.DataAccess
 
         private void LogTaskPhaseDuration(DateTime Day)
         {
-
-            // Get phases for a date
-            var phases = context.TaskPhases;
-            // Get tasks for this phases
-            var tasks = context.Tasks.Where(t => phases.Select(p => p.TaskId).Contains(t.Id));
-
-            // Iterate throught these task and sum the phases
-            foreach(var task in tasks)
+            using (var scope = Container.BeginLifetimeScope())
             {
-                var taskDuration = new TimeSpan();
-                // Get phases for this dedicated task
-                var taskPhases = phases.Where(p => p.TaskId == task.Id).ToList<ITaskPhase>();
-                taskDuration= timeReporter.GetTaskPhasesDuration(taskPhases, Day, Day + new TimeSpan(1,0,0,0));
+                var nextDay = Day + new TimeSpan(1, 0, 0, 0);
+                // Get phases for a date
+                var phases = context.TaskPhases.Where(p => p.EndDate >= Day && p.EndDate < nextDay);
+                // Get tasks for this phases
+                var tasks = context.Tasks.Where(t => phases.Select(p => p.TaskId).Contains(t.Id));
+
+                var taskTaskPhasesConnectors = new List<ITaskTaskPhaseConnector>();
+                // Iterate throught these task and sum the phases
+                foreach (var task in tasks)
+                {                    
+                    
+                    // Get phases for this dedicated task
+                    var taskPhases = phases.Where(p => p.TaskId == task.Id).ToList<ITaskPhase>();
+
+                    var connector = Container.Resolve<ITaskTaskPhaseConnector>();
+                    connector.OwnerTask = task;
+                    connector.MemberTaskPhases = taskPhases;
+                    taskTaskPhasesConnectors.Add(connector);
+                }
+
+                var report = Container.Resolve<ITimeReport>();
+                var result = report.ReportList(taskTaskPhasesConnectors, Day, Day + new TimeSpan(1, 0, 0, 0));
+                var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}_{2}_{3}.txt",
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.Year, Day.Month, Day.Day);
+                report.WriteToFile(filepath);                
                 
-
-                // Log the duration of this task
-
-                Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskPhasesDate: {0} |  Duration {1} | Task: {2}", Day, taskDuration.ToString(), task.Name));
-
             }
                
             

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using libjfunx.logging;
-using System.Data.Entity;
+using Autofac;
 
 namespace ch.jaxx.TaskManager.DataAccess
 {
@@ -10,6 +8,7 @@ namespace ch.jaxx.TaskManager.DataAccess
     {
         private string connectionString;
         private DoDataOperations doDataOps;
+        private static IContainer Container { get; set; }
 
         /// <summary>
         /// Creates a new instance of TaskManager
@@ -17,8 +16,16 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <param name="ConnectionString"></param>
         public TaskManager(string ConnectionString)
         {
+            InitAutofacContainer();
             this.connectionString = ConnectionString;            
-            this.doDataOps = new DoDataOperations(this.connectionString);
+            this.doDataOps = new DoDataOperations(this.connectionString,Container);
+        }
+
+        private void InitAutofacContainer()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new TaskManagerConfiguratioModule());
+            Container = builder.Build();
         }
 
         public TaskManager()

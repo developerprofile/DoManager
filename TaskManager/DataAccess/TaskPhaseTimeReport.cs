@@ -46,7 +46,8 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <param name="FileName"></param>
         public void WriteToFile(string FileName)
         {
-            File.WriteAllText(FileName, report.ToString());
+            Directory.CreateDirectory(new FileInfo(FileName).DirectoryName);
+            File.WriteAllLines(FileName, report);
         }
     }
 }

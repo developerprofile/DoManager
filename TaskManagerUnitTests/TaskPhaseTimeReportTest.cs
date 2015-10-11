@@ -7,6 +7,7 @@ using Autofac;
 using NUnit.Framework;
 using ch.jaxx.TaskManager.DataAccess;
 using Ploeh.AutoFixture;
+using System.IO;
 
 namespace TaskManagerUnitTests
 {
@@ -125,6 +126,18 @@ namespace TaskManagerUnitTests
             ITimeReport report = new TaskPhaseTimeReport(reporter);
             var actual = report.ReportList(testData,null,null);
             Assert.AreEqual(expected, actual);
+
+            var filepath = System.IO.Path.GetTempFileName();
+            var expectedFileContent = new string[] { "Task: Task1, PhasesDuration: 02:00:00", "Task: Task2, PhasesDuration: 02:00:00" };
+
+            report.WriteToFile(filepath);
+
+            var actualContent = File.ReadAllLines(filepath);
+            Assert.AreEqual(expectedFileContent, actualContent);
+
+            File.Delete(filepath);
         }
+
+
     }
 }
