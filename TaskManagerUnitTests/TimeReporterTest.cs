@@ -129,5 +129,24 @@ namespace TaskManagerUnitTests
 
             Assert.AreEqual(expectedDuration, actualDuration);
         }
+
+        [TestCase]
+        public void A05_GetSumTaskDurationByFateRangePassingNull()
+        {
+            var testTaskPhaseSet = testTaskPhaseSetOne;
+            var expectedDuration = new TimeSpan(1, 2, 50, 20);
+
+            var reporter = new TimeReporter();
+
+            // Pass null instead of fromDate > sum without filter
+            var actualDuration = reporter.GetTaskPhasesDuration(testTaskPhaseSet, null, new DateTime(2015, 10, 04));
+            Assert.AreEqual(expectedDuration, actualDuration);
+            // Pass null instead of endDate > sum without filter
+            actualDuration = reporter.GetTaskPhasesDuration(testTaskPhaseSet, new DateTime(2015, 10, 03), null);
+            Assert.AreEqual(expectedDuration, actualDuration);
+            // Pass null instead of fromDate and endDate > sum wihtout filter
+            actualDuration = reporter.GetTaskPhasesDuration(testTaskPhaseSet, null, null);
+            Assert.AreEqual(expectedDuration, actualDuration);
+        }
     }
 }

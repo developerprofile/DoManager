@@ -30,11 +30,13 @@ namespace ch.jaxx.TaskManager.DataAccess
 
         /// <summary>
         /// Calculates the sum of all durations in the given ITaskPhase List but filters the liste between the two given dates.
+        /// If one of the dates is null, the duration of the complete list will be calculated without appliying a filter.
         /// </summary>
         /// <param name="TaskPhasesList"></param>
         /// <param name="FromDate"></param>
         /// <param name="ToDate"></param>
         /// <returns></returns>
-        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList, DateTime FromDate, DateTime ToDate);
+        TimeSpan GetTaskPhasesDuration(List<ITaskPhase> TaskPhasesList, DateTime? FromDate, DateTime? ToDate);
+        
     }
 }
