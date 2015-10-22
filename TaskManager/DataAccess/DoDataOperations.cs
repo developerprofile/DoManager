@@ -346,8 +346,8 @@ namespace ch.jaxx.TaskManager.DataAccess
 
                 var report = Container.Resolve<ITimeReport>();
                 var result = report.ReportList(taskTaskPhasesConnectors, Day, Day + new TimeSpan(1, 0, 0, 0));
-                var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}_{2}_{3}.txt",
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.Year, Day.Month, Day.Day);
+                var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}.txt",
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.ToString("yyyy_MM_dd"));
                 report.WriteToFile(filepath);                
                 
             }
