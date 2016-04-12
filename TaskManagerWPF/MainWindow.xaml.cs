@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ch.jaxx.TaskManager.DataAccess;
-using libjfunx.logging;
+using Dapplo.LogFacade;
 using System.ComponentModel;
 
 namespace TaskManagerWPF
@@ -16,12 +16,11 @@ namespace TaskManagerWPF
         public MainWindow()
         {
             InitializeComponent();
-            Logger.SetLogger(new ReflectingFileLogger(Properties.Settings.Default.Logfile,LogEintragTyp.Debug));            
+            Dapplo.LogFacade.Loggers.NLogLogger.RegisterLogger(Dapplo.LogFacade.LogLevel.Verbose);
         }
 
         
         private TaskManager taskMan;
-
 
         private void btnMarkNextTask_Click(object sender, RoutedEventArgs e)
         {  
