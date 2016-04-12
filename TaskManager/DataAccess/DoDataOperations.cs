@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using libjfunx.logging;
+using Dapplo.LogFacade;
 using System.Data.Entity;
 using Autofac;
 
@@ -12,6 +12,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         private string connectionString;
         private FirebirdContext context;        
         private static IContainer Container { get; set; }
+        private static readonly LogSource Log = new LogSource();
 
         /// <summary>
         /// Creates a new instance of DoDataaOperations
@@ -173,7 +174,7 @@ namespace ch.jaxx.TaskManager.DataAccess
 
             context.TaskPhases.Add(taskPhase);
             context.SaveChanges();
-            Logger.Log(LogEintragTyp.Debug, "Start new task phase for taskid " + OwnerTask.Id);
+            Log.Debug().WriteLine("Start new task phase for taskid {0} ", OwnerTask.Id);
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace ch.jaxx.TaskManager.DataAccess
 
             lastTaskPhase.EndDate = PhaseEndDate;
             context.SaveChanges();
-            Logger.Log(LogEintragTyp.Debug, "End task phase for taskid " + OwnerTask.Id);
+            Log.Debug().WriteLine("End task phase for taskid {0}", OwnerTask.Id);
         }
 
         /// <summary>

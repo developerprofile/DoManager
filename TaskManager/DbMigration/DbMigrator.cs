@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ch.jaxx.TaskManager.DataAccess;
-using libjfunx.logging;
+using Dapplo.LogFacade;
 
 namespace ch.jaxx.TaskManager.DbMigration
 {
@@ -16,6 +16,7 @@ namespace ch.jaxx.TaskManager.DbMigration
             this.connectionString = ConnectionString;
         }
 
+        private static readonly LogSource Log = new LogSource();
         private string connectionString;
         private FirebirdContext context;
 
@@ -30,18 +31,18 @@ namespace ch.jaxx.TaskManager.DbMigration
                 }
                 catch (System.Data.Entity.Core.EntityCommandExecutionException e)
                 {
-                    Logger.Log(LogEintragTyp.Fehler, e.InnerException.ToString());
+                    Log.Error().WriteLine(e.InnerException.ToString());
                     if (e.InnerException.ToString().Contains("DBVERSION"))
                     {                        
                         context.Database.ExecuteSqlCommand("CREATE TABLE DBVERSION (DBVERSION int, DESCRIPTION varchar(256))");
                         context.SaveChanges();
                         context.DbVersion.Add(new DbVersionModel() { Version = 1, Descripiton = "Inital Db Version with version table" });
                         context.SaveChanges();
-                        Logger.Log(LogEintragTyp.Erfolg, "Created Table DBVERSION");
+                        Log.Info().WriteLine("Created Table DBVERSION");
                         UpgradeDb();
                     }
                 }
-                Logger.Log(LogEintragTyp.Status, "DB version is " + dbVersion.ToString());
+                Log.Info().WriteLine("DB version is {0}", dbVersion.ToString());
                 return dbVersion;
             }                   
         }
@@ -55,7 +56,7 @@ namespace ch.jaxx.TaskManager.DbMigration
                     UpdgradeToDbVersion_2();
                     break;
                 case 2:
-                    Logger.Log(LogEintragTyp.Hinweis, "DB is up to date.");
+                    Log.Info().WriteLine("DB is up to date.");
                     break;
             }
         }
