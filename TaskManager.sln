@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager", "TaskManager\TaskManager.csproj", "{F4BDE928-81AD-465F-9BCA-6E136F8B90C8}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerWPF", "TaskManagerWPF\TaskManagerWPF.csproj", "{AFF32219-E183-4640-8951-99AF37676008}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerUnitTests", "TaskManagerUnitTests\TaskManagerUnitTests.csproj", "{89B685CB-C6C1-4EDE-9448-734F66391887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoManagerMui", "DoManagerMui\DoManagerMui.csproj", "{58ED6DCD-0753-48CE-B5AE-629FC5044D25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{89B685CB-C6C1-4EDE-9448-734F66391887}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89B685CB-C6C1-4EDE-9448-734F66391887}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89B685CB-C6C1-4EDE-9448-734F66391887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58ED6DCD-0753-48CE-B5AE-629FC5044D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58ED6DCD-0753-48CE-B5AE-629FC5044D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58ED6DCD-0753-48CE-B5AE-629FC5044D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58ED6DCD-0753-48CE-B5AE-629FC5044D25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
