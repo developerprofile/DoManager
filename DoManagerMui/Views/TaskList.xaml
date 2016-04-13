@@ -4,9 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DoManagerMui.Views"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform" 
+             DataContext="{Binding TaskListView, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="1000">
     <Grid>
-            
+        <StackPanel>
+            <WrapPanel Margin="0,5,0,5">
+                <TextBox Text="{Binding TaskInputBox,UpdateSourceTrigger=PropertyChanged}" Width="630" Margin="5,0,5,0" />
+            </WrapPanel>
+            <WrapPanel  Margin="0,5,0,5">
+                <Button Content="Create new task" Width="150" Margin="5,0,5,0" Command="{Binding CreateNewTask}"/>
+                <Button Content="Interrupt active task" Width="150" Margin="5,0,5,0" Command="{Binding InterruptTask}"/>
+                <Button Content="Start next task"  Width="150" Margin="5,0,5,0" Command="{Binding StartNextTask}"/>
+                <Button Content="Finish task"  Width="150" Margin="5,0,5,0" Command="{Binding FinishTask}"/>
+            </WrapPanel>
+            <DataGrid Name="DG1" ItemsSource="{Binding TaskList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <mui:DataGridTextColumn Header="State" Binding="{Binding State}" IsReadOnly="True" Width="100" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden" IsReadOnly="True" Width="100" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="CreationDate" Binding="{Binding CreationDate}" IsReadOnly="True" Width="150" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="StartDate" Binding="{Binding StartDate}" IsReadOnly="True" Width="150" CanUserSort="False"/>
+                </DataGrid.Columns>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseRightButtonDown">
+                        <cmd:EventToCommand Command="{Binding LoadContextMenu}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="CellEditEnding">
+                        <cmd:EventToCommand Command="{Binding OnCellEditEnding}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DataGrid>
+        </StackPanel>
+
     </Grid>
 </UserControl>

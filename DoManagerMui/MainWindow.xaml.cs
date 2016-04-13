@@ -23,7 +23,22 @@ namespace DoManagerMui
     {
         public MainWindow()
         {
+            Dapplo.LogFacade.Loggers.NLogLogger.RegisterLogger(Dapplo.LogFacade.LogLevel.Verbose);
             InitializeComponent();
+        }
+
+        internal void SetTaskBarIconActive()
+        {
+            this.TaskbarItemInfo.Overlay = (ImageSource)Resources["OverlayImage"];
+            this.TaskbarItemInfo.ProgressValue = 100;
+            this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+        }
+
+        internal void SetTaskBarIconPaused()
+        {
+            this.TaskbarItemInfo.Overlay = null;
+            this.TaskbarItemInfo.ProgressValue = 100;
+            this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
         }
     }
 }

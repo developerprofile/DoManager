@@ -12,10 +12,12 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using System;
 using Autofac;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using ch.jaxx.TaskManager.DataAccess;
 
 namespace DoManagerMui.ViewModel
 {
@@ -32,10 +34,33 @@ namespace DoManagerMui.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
+            string databaseFileName;
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                databaseFileName = @"D:\TEMP\WORK3.FDB";
+            }
+            else
+            {
+                databaseFileName = GetDatabase();
+                if (databaseFileName == "") Environment.Exit(-1);
+            }
+            var connectionString = String.Format(@"server type=Embedded;user id=sysdba;password=masterky;dialect=3;character set=UTF8;client library=fbembed.dll;database={0}", databaseFileName);
+            var taskMan = new TaskManager(connectionString);
+
             var builder = new ContainerBuilder();
             builder.RegisterType<MainViewModel>();
+            builder.RegisterType<TaskListViewModel>().WithParameters(new TypedParameter[]
+                {
+                    new TypedParameter(typeof(TaskManager), taskMan), 
+                    new TypedParameter(typeof(MainWindow), App.Current.MainWindow)
+                });
+            builder.RegisterType<TimeLogViewModel>().WithParameters(new TypedParameter[]
+                {
+                    new TypedParameter(typeof(TaskManager), taskMan)
+                });
+            builder.RegisterType<SettingsViewModel>();
             viewContainer = builder.Build();
-
+            
             ////if (ViewModelBase.IsInDesignModeStatic)
             ////{
             ////    // Create design time view services and models
@@ -50,6 +75,18 @@ namespace DoManagerMui.ViewModel
           
         }
 
+        private string GetDatabase()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "Firebird Database (*.fdb)|*.fdb|All files (*.*)|*.*";
+            dialog.Title = "Choose a database";
+            if (dialog.ShowDialog().Value)
+            {
+                return (dialog.FileName);
+            }
+            else return "";
+        }
+
         public MainViewModel Main
         {
             get
@@ -60,7 +97,40 @@ namespace DoManagerMui.ViewModel
                 }
             }
         }
+
+        public SettingsViewModel SettingsView
+        {
+            get
+            {
+                using (var scope = viewContainer.BeginLifetimeScope())
+                {
+                    return scope.Resolve<SettingsViewModel>();
+                }
+            }
+        }
         
+        public TaskListViewModel TaskListView
+        {
+            get
+            {
+                using (var scope = viewContainer.BeginLifetimeScope())
+                {
+                    return scope.Resolve<TaskListViewModel>();
+                }
+            }
+        }
+
+        public TimeLogViewModel TimeLogView
+        {
+            get
+            {
+                using (var scope = viewContainer.BeginLifetimeScope())
+                {
+                    return scope.Resolve<TimeLogViewModel>();
+                }
+            }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
