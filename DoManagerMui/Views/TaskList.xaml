@@ -22,6 +22,9 @@
                 <Button Content="Finish task"  Width="150" Margin="5,0,5,0" Command="{Binding FinishTask}"/>
             </WrapPanel>
             <DataGrid Name="DG1" ItemsSource="{Binding TaskList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid.Background>
+                    <SolidColorBrush Color="White" Opacity="0.4"/>
+                </DataGrid.Background>
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
                         <Setter Property="HorizontalContentAlignment" Value="Left"/>

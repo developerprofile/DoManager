@@ -113,6 +113,10 @@
     <Compile Include="Views\TimeLogView.xaml.cs">
       <DependentUpon>TimeLogView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Assets\ModernUI.Water.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\ModernUI.Snowflakes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -184,6 +188,7 @@
     <Resource Include="Assets\background.snowflakes.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\background.water.jpg" />
     <Resource Include="Assets\clock.png" />
     <Content Include="Resources\TM.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

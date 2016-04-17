@@ -12,8 +12,12 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <StackPanel>
-             <Calendar SelectedDate="{Binding SelectedDate}"/>
-             <Button Content="Export time log" Command="{Binding OnExportTimeLog}" />
+            <Calendar SelectedDate="{Binding SelectedDate}">
+                <Calendar.Background>
+                    <SolidColorBrush Color="White" Opacity="0.8" />
+                </Calendar.Background>
+            </Calendar>
+            <Button Content="Export time log" Width="170" Command="{Binding OnExportTimeLog}" />
         </StackPanel>
     </Grid>
 </UserControl>
