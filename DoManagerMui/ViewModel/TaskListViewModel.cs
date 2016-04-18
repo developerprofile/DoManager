@@ -103,9 +103,12 @@ namespace DoManagerMui.ViewModel
 
         private void ExecuteLoadContextMenu(MouseButtonEventArgs obj)
         {
-            if (obj.Source == null) return;
 
             var source = obj.OriginalSource as TextBlock;
+            // (#4) if user right click into datagrids header the cast to Textblock will fail, 
+            //      source will be null and cause an ArgumentNullException when accessed
+            if (source == null) return;
+    
             var currentItem = source.DataContext as ITask;
 
             var contextMenu = new ContextMenu();
