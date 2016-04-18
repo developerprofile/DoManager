@@ -12,7 +12,7 @@
     <!-- background image taken from http://good-wallpapers.com/ -->
     <Rectangle x:Key="WindowBackgroundContent" x:Shared="false">
         <Rectangle.Fill>
-            <ImageBrush Opacity=".5" ImageSource="/Assets/background.water.jpg" Stretch="UniformToFill" />
+            <ImageBrush Opacity=".3" ImageSource="/Assets/background.water.jpg" Stretch="UniformToFill" />
         </Rectangle.Fill>
     </Rectangle>
 
