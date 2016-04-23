@@ -198,6 +198,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /Y "$(SolutionDir)TaskManager\fbembed.dll" "$(TargetDir)"
+xcopy /Y "$(SolutionDir)TaskManager\ib_util.dll"$(TargetDir)"
 xcopy /Y "$(SolutionDir)TaskManager\icudt30.dll" "$(TargetDir)"
 xcopy /Y "$(SolutionDir)TaskManager\icuin30.dll" "$(TargetDir)"
 xcopy /Y "$(SolutionDir)TaskManager\icuuc30.dll" "$(TargetDir)"
