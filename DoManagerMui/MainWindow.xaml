@@ -7,7 +7,7 @@
         xmlns:presentation="clr-namespace:FirstFloor.ModernUI.Presentation;assembly=FirstFloor.ModernUI"
         xmlns:local="clr-namespace:DoManagerMui"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1024"
+        Title="MainWindow" Height="700" Width="1024" MinHeight="500" MinWidth="750"
         Icon="pack://siteoforigin:,,,/Resources/TM.ico"
         ContentSource="Views/TaskList.xaml">
    
