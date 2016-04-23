@@ -13,6 +13,14 @@
     <Grid>
         <StackPanel>
             <Calendar SelectedDate="{Binding SelectedDate}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotMouseCapture">
+                        <cmd:EventToCommand Command="{Binding GotMouseCapture}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="CellEditEnding">
+                        <cmd:EventToCommand Command="{Binding OnCellEditEnding}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <Calendar.Background>
                     <SolidColorBrush Color="White" Opacity="0.8" />
                 </Calendar.Background>

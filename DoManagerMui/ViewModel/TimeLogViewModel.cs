@@ -20,6 +20,7 @@ namespace DoManagerMui.ViewModel
             taskMan = TaskManager;
             SelectedDate = DateTime.Now - new TimeSpan(1, 0, 0, 0);
             OnExportTimeLog = new RelayCommand(ExecuteExportTimeLog);
+            GotMouseCapture = new RelayCommand<MouseEventArgs>(ExecuteGotMouseCapture);
         }
 
         public DateTime SelectedDate
@@ -39,11 +40,21 @@ namespace DoManagerMui.ViewModel
 
 
         public ICommand OnExportTimeLog { get; private set; }
+        public ICommand GotMouseCapture { get; private set; }
 
 
         private void ExecuteExportTimeLog()
         {
             taskMan.LogTaskDurations(SelectedDate);
+        }
+
+        private void ExecuteGotMouseCapture(MouseEventArgs obj)
+        {
+            if (Mouse.Captured is System.Windows.Controls.Calendar || Mouse.Captured is System.Windows.Controls.Primitives.CalendarItem)
+            {
+                // free mouse capture from calendar
+                Mouse.Capture(null);
+            }
         }
     }
 }
