@@ -107,7 +107,9 @@
     <Content Include="fbembed.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ib_util.dll" />
+    <Content Include="ib_util.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="icudt30.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
