@@ -17,8 +17,8 @@ namespace ch.jaxx.TaskManager.DataAccess
         public TaskManager(string ConnectionString)
         {
             InitAutofacContainer();
-            this.connectionString = ConnectionString;            
-            this.doDataOps = new DoDataOperations(this.connectionString,Container);
+            this.connectionString = ConnectionString;
+            this.doDataOps = new DoDataOperations(this.connectionString, Container);
         }
 
         private void InitAutofacContainer()
@@ -44,7 +44,7 @@ namespace ch.jaxx.TaskManager.DataAccess
 
             // if new task is also the oldest one, then it's the only one!
             // Make it next! (DOMA-7)
-            if (newTask.Id ==  doDataOps.OldestOpenTask.Id)
+            if (newTask.Id == doDataOps.OldestOpenTask.Id)
             {
                 doDataOps.MarkTaskAsNext(newTask);
             }
@@ -72,23 +72,23 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// no next task found.</returns>
         /// <remarks>Passing the id of the active task will stop the current task phase and set the active task the next task.
         /// This is something like a pause funtion. When passing no task id, the active task will never become the next task.</remarks>
-        public TaskModel MarkNextTask(int TaskId = 0) 
+        public TaskModel MarkNextTask(int TaskId = 0)
         {
             // check if a special task id should become the next task,
             // otherwise choose the oldest task the next task
             TaskModel nextTask = null;
-            var task =  doDataOps.GetTaskById(TaskId);
+            var task = doDataOps.GetTaskById(TaskId);
 
             // if there is task switch and handle its state
             if (task != null)
             {
                 switch (task.State)
                 {
-                    case null:                        
+                    case null:
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
                     case TaskState.ACTIVE:
-                        doDataOps.EndTaskPhaseNow(task);                       
+                        doDataOps.EndTaskPhaseNow(task);
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
                     case TaskState.NEXT:
@@ -105,7 +105,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                 var oldestTask = doDataOps.OldestOpenTask;
                 nextTask = doDataOps.MarkTaskAsNext(oldestTask);
             }
- 
+
             return nextTask;
         }
 
@@ -129,17 +129,22 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// <summary>
         /// Starts the next task by setting it's start date to now. After starting this function will mark the next task.
         /// </summary>
-        /// <returns>Returns the task wich has been started and null, if no task to start was found or there is still 
-        /// an unfinished task.</returns>
+        /// <returns>Returns the task wich has been started and null, if no task to start was found. 
+        /// If a task is active this function will toggle the active state between active and next task.
+        ///</returns>
         public TaskModel StartNextTask()
         {
-            if (doDataOps.ActiveTask != null) return null;
+            var activeTask = doDataOps.ActiveTask;
             var nextTask = doDataOps.NextTask;
             if (nextTask != null)
             {
                 doDataOps.StartTaskNow(nextTask);
                 doDataOps.StartTaskPhaseNow(nextTask);
-                doDataOps.MarkTaskAsNext(doDataOps.OldestOpenTask);
+                if (activeTask != null)
+                {
+                    doDataOps.MarkTaskAsNext(activeTask);
+                }
+                else doDataOps.MarkTaskAsNext(doDataOps.OldestOpenTask);
                 return nextTask;
             }
             else return null;
@@ -154,7 +159,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         {
             var interruptedTask = doDataOps.ActiveTask;
             // to interrupt the active task, there must be an active task
-            if (interruptedTask!= null && !String.IsNullOrEmpty(TaskName))
+            if (interruptedTask != null && !String.IsNullOrEmpty(TaskName))
             {
                 // Create new task
                 var newTask = CreateQueueTask(TaskName);
@@ -163,14 +168,14 @@ namespace ch.jaxx.TaskManager.DataAccess
                 doDataOps.EndTaskPhaseNow(interruptedTask);
                 // Stop the current active task
                 doDataOps.StopTask(interruptedTask);
-                
+
                 // Mark new task next as next to interrupt it
                 doDataOps.MarkTaskAsNext(newTask);
                 // Start the next task
                 doDataOps.StartTaskNow(newTask);
                 // Start new task phase
                 doDataOps.StartTaskPhaseNow(newTask);
-                
+
                 // and mark interrupted task as new next task 
                 doDataOps.MarkTaskAsNext(interruptedTask);
 
