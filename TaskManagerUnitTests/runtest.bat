@@ -1,1 +1,1 @@
-..\..\..\packages\NUnit.Runners.2.6.4\tools\nunit-console.exe TaskManagerUnitTests.dll /noshadow /framework:net-4.5
+..\..\..\packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe TaskManagerUnitTests.dll /framework:net-4.5
