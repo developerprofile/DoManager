@@ -8,6 +8,6 @@ namespace ch.jaxx.TaskManager.DataAccess
 {
     public enum TaskState
     {
-        ACTIVE, DONE, NEXT
+        ACTIVE, DONE, NEXT, BLOCKED
     }
 }

@@ -113,27 +113,39 @@ namespace DoManagerMui.ViewModel
 
             var contextMenu = new ContextMenu();
 
-            var markNextMenuItem = new MenuItem { Header = "Mark as next" };
+            var markNextMenuItem = new MenuItem { Header = "Mark as next" };            
+
             markNextMenuItem.Click += (s, e) =>
             {
                 taskMan.MarkNextTask(currentItem.Id);
                 RefreshTaskList();
             };
 
-           // contextMenu.Items.Add(new MenuItem { Header = currentItem.Id });
+           
             contextMenu.Items.Add(markNextMenuItem);
-           // contextMenu.Items.Add(new MenuItem { Header = "Item with gesture", InputGestureText = "Ctrl+C" });
-           // contextMenu.Items.Add(new MenuItem { Header = "Item, disabled", IsEnabled = false });
-           // contextMenu.Items.Add(new MenuItem { Header = "Item, checked", IsChecked = true });
-           // contextMenu.Items.Add(new MenuItem { Header = "Item, checked and disabled", IsChecked = true, IsEnabled = false });
+
+            var blockMenuItem = new MenuItem { Header = "Block/Unblock" };
+            blockMenuItem.Click += (s, e) =>
+            {
+                taskMan.BlockOrUnblockTask(currentItem.Id);
+                RefreshTaskList();
+            };
+            contextMenu.Items.Add(blockMenuItem);
+
+
+            contextMenu.IsOpen = true;
+
+            // contextMenu.Items.Add(new MenuItem { Header = currentItem.Id });
+            // contextMenu.Items.Add(new MenuItem { Header = "Item with gesture", InputGestureText = "Ctrl+C" });
+            // contextMenu.Items.Add(new MenuItem { Header = "Item, disabled", IsEnabled = false });
+            // contextMenu.Items.Add(new MenuItem { Header = "Item, checked", IsChecked = true });
+            // contextMenu.Items.Add(new MenuItem { Header = "Item, checked and disabled", IsChecked = true, IsEnabled = false });
             //contextMenu.Items.Add(new Separator());
             //contextMenu.Items.Add(CreateSubMenu("Item with submenu"));
 
             //var menu = CreateSubMenu("Item with submenu, disabled");
             // menu.IsEnabled = false;
             //contextMenu.Items.Add(menu);
-
-            contextMenu.IsOpen = true;
         }
 
         /// <summary>

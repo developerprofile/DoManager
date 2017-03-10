@@ -125,13 +125,24 @@ namespace ch.jaxx.TaskManager.DataAccess
         }
 
         /// <summary>
-        /// Stops a task (without setting it done)
+        /// Reset the task state to null an therfore also stops a task (without setting it done)
         /// </summary>
-        /// <param name="TaskToStop"></param>
-        internal void StopTask(TaskModel TaskToStop)
+        /// <param name="Task"></param>
+        internal void ResetTaskState(TaskModel taskToReset)
         {
-            var task = context.Tasks.Find(TaskToStop.Id);
+            var task = context.Tasks.Find(taskToReset.Id);
             task.State = null;
+            context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Blocks a task
+        /// </summary>
+        /// <param name="task"></param>
+        internal void BlockTask(TaskModel task)
+        {
+            var taskToBlock = context.Tasks.Find(task.Id);
+            taskToBlock.State = TaskState.BLOCKED;
             context.SaveChanges();
         }
 
@@ -211,7 +222,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         }
 
         /// <summary>
-        /// Get the oldest task which is not done or active, returns null, if there isn't any.
+        /// Get the oldest task which is not done, active or blocked, returns null, if there isn't any.
         /// </summary>
         internal TaskModel OldestOpenTask
         {
@@ -221,6 +232,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                 var taskList = context.Tasks
                                     .Where(t => t.State != TaskState.DONE)
                                     .Where(t => t.State != TaskState.ACTIVE)
+                                    .Where(t => t.State != TaskState.BLOCKED)
                                     .OrderBy(t => t.CreationDate);
 
                 return taskList.FirstOrDefault();

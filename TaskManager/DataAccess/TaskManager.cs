@@ -44,12 +44,21 @@ namespace ch.jaxx.TaskManager.DataAccess
 
             // if new task is also the oldest one, then it's the only one!
             // Make it next! (DOMA-7)
-            if (newTask.Id == doDataOps.OldestOpenTask.Id)
-            {
-                doDataOps.MarkTaskAsNext(newTask);
-            }
+            SetNextIfOldestTask(newTask);
 
             return newTask;
+        }
+
+        /// <summary>
+        /// If this task is the oldestOpenTask set it next
+        /// </summary>
+        /// <param name="task"></param>
+        private void SetNextIfOldestTask(TaskModel task)
+        {
+            if (task.Id == doDataOps.OldestOpenTask.Id)
+            {
+                doDataOps.MarkTaskAsNext(task);
+            }
         }
 
 
@@ -68,7 +77,7 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// </summary>
         /// <param name="TaskId">If provided the task with this id will become next task. Otherwise the oldest task will be selected
         /// (if 0 is passed, default = 0)</param>
-        /// <returns>Returns th task which has been marked as next and NULL in case the was
+        /// <returns>Returns the task which has been marked as next and NULL in case the was
         /// no next task found.</returns>
         /// <remarks>Passing the id of the active task will stop the current task phase and set the active task the next task.
         /// This is something like a pause funtion. When passing no task id, the active task will never become the next task.</remarks>
@@ -91,10 +100,13 @@ namespace ch.jaxx.TaskManager.DataAccess
                         doDataOps.EndTaskPhaseNow(task);
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
-                    case TaskState.NEXT:
+                    case TaskState.NEXT:                    
                         nextTask = task;
                         break;
-                    case TaskState.DONE:
+                    case TaskState.BLOCKED:
+                        nextTask = doDataOps.MarkTaskAsNext(task);
+                        break;
+                    case TaskState.DONE:                    
                     default:
                         break;
                 }
@@ -107,6 +119,33 @@ namespace ch.jaxx.TaskManager.DataAccess
             }
 
             return nextTask;
+        }
+
+        /// <summary>
+        /// Blocks or unblocks a task.
+        /// </summary>
+        /// <param name="id"></param>
+        public void BlockOrUnblockTask(int id)
+        {
+            var task = doDataOps.GetTaskById(id);
+            switch (task.State)
+            {
+                case null:
+                    doDataOps.BlockTask(task);
+                    break;
+                case TaskState.BLOCKED:
+                    doDataOps.ResetTaskState(task);
+                    SetNextIfOldestTask(task);
+                    break;
+                case TaskState.ACTIVE:
+                    doDataOps.EndTaskPhaseNow(task);
+                    doDataOps.BlockTask(task);
+                    break;
+                case TaskState.NEXT:
+                    doDataOps.BlockTask(task);
+                    MarkNextTask();
+                    break;
+            }            
         }
 
         /// <summary>
@@ -167,7 +206,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                 // Stop the current active task phase
                 doDataOps.EndTaskPhaseNow(interruptedTask);
                 // Stop the current active task
-                doDataOps.StopTask(interruptedTask);
+                doDataOps.ResetTaskState(interruptedTask);
 
                 // Mark new task next as next to interrupt it
                 doDataOps.MarkTaskAsNext(newTask);
