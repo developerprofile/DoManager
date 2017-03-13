@@ -6,7 +6,7 @@
 
 ## Quickstart
 
-Download the [ZIP file](https://ci.appveyor.com/project/viper3400/domanager) and extract it. No installation or setup, it’s portable.
+Download the [ZIP file](https://ci.appveyor.com/project/viper3400/domanager/build/artifacts) and extract it. No installation or setup, it’s portable.
 
 The ZIP file contains a template database (TEMPLATE.FDB). You could use this template right away or copy and rename this template to a more friendly name.
 
