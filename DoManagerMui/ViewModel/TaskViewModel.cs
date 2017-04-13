@@ -21,11 +21,11 @@ namespace DoManagerMui.ViewModel
                 {
                     case TaskState.ACTIVE:
                         meta.State = Task.State.ToString();
-                        meta.Color = Color.Green.Name;
+                        meta.Color = Color.OliveDrab.Name;
                         break;
                     case TaskState.BLOCKED:
                         meta.State = Task.State.ToString();
-                        meta.Color = Color.Black.Name;
+                        meta.Color = Color.Gray.Name;
                         break;
                     case TaskState.DONE:
                         meta.State = Task.State.ToString();
@@ -33,11 +33,11 @@ namespace DoManagerMui.ViewModel
                         break;
                     case TaskState.NEXT:
                         meta.State = Task.State.ToString();
-                        meta.Color = Color.Blue.Name;
+                        meta.Color = Color.DarkOrange.Name;
                         break;
                     default:
                         meta.State = "TO DO";
-                        meta.Color = Color.DarkOrange.Name;
+                        meta.Color = Color.LightSalmon.Name;
                         break;
                 }
 
