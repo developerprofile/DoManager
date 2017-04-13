@@ -20,7 +20,7 @@ namespace DoManagerMui.ViewModel
 
         private TaskManager taskMan;
         private MainWindow hostWindow;
-        private IEnumerable<ITask> taskList;
+        private IEnumerable<TaskViewModel> taskList;
         private string taskInputBox;
 
 
@@ -55,7 +55,7 @@ namespace DoManagerMui.ViewModel
             }
         }
 
-        public IEnumerable<ITask> TaskList
+        public IEnumerable<TaskViewModel> TaskList
         {
             get
             {
@@ -109,7 +109,7 @@ namespace DoManagerMui.ViewModel
             //      source will be null and cause an ArgumentNullException when accessed
             if (source == null) return;
     
-            var currentItem = source.DataContext as ITask;
+            var currentItem = source.DataContext as TaskViewModel;
 
             var contextMenu = new ContextMenu();
 
@@ -117,7 +117,7 @@ namespace DoManagerMui.ViewModel
 
             markNextMenuItem.Click += (s, e) =>
             {
-                taskMan.MarkNextTask(currentItem.Id);
+                taskMan.MarkNextTask(currentItem.Task.Id);
                 RefreshTaskList();
             };
 
@@ -127,7 +127,7 @@ namespace DoManagerMui.ViewModel
             var blockMenuItem = new MenuItem { Header = "Block/Unblock" };
             blockMenuItem.Click += (s, e) =>
             {
-                taskMan.BlockOrUnblockTask(currentItem.Id);
+                taskMan.BlockOrUnblockTask(currentItem.Task.Id);
                 RefreshTaskList();
             };
             contextMenu.Items.Add(blockMenuItem);
@@ -186,7 +186,7 @@ namespace DoManagerMui.ViewModel
         {
             if ((obj.EditingElement.Parent as DataGridCell).Column.Header.ToString() == "Name")
             {
-                var editedTaskId = (obj.EditingElement.DataContext as TaskModel).Id;
+                var editedTaskId = (obj.EditingElement.DataContext as TaskViewModel).Task.Id;
                 var newValue = (obj.EditingElement as TextBox).Text;
                 Log.Debug().WriteLine("OnCellEditEnding Taskid {0}, rename to {1}", editedTaskId, newValue);
                 taskMan.RenameTask(editedTaskId, newValue);
@@ -217,7 +217,14 @@ namespace DoManagerMui.ViewModel
 
         private void RefreshTaskList()
         {
-            TaskList = taskMan.GetAllTasks();
+            var tasks = new List<TaskViewModel>();
+            foreach(var t in taskMan.GetAllTasks())
+            {
+                var model = new TaskViewModel { Task = t };
+                tasks.Add(model);
+            }
+            TaskList = tasks;
+
             RefreshOverlayIcon();
         }
 

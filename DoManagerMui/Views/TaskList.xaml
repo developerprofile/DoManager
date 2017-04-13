@@ -37,11 +37,20 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <mui:DataGridTextColumn Header="State" Binding="{Binding State}" IsReadOnly="True" Width="100" CanUserSort="False"/>
-                    <mui:DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden" IsReadOnly="True" Width="100" CanUserSort="False"/>
-                    <mui:DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="100" CanUserSort="False"/>
-                    <mui:DataGridTextColumn Header="CreationDate" Binding="{Binding CreationDate}" IsReadOnly="True" Width="150" CanUserSort="False"/>
-                    <mui:DataGridTextColumn Header="StartDate" Binding="{Binding StartDate}" IsReadOnly="True" Width="150" CanUserSort="False"/>
+                    <!--<mui:DataGridTextColumn Header="State" Binding="{Binding State}" IsReadOnly="True" Width="100" CanUserSort="False"/>-->
+                    <DataGridTemplateColumn IsReadOnly="True" Width="100" CanUserSort="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding MetaData.Color}" CornerRadius="5" Padding="4" Margin="2">
+                                    <TextBlock Foreground="White" FontWeight="Bold" FontSize="11" Text="{Binding MetaData.State}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <mui:DataGridTextColumn Header="Id" Binding="{Binding Task.Id}" Visibility="Hidden" IsReadOnly="True" Width="100" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="Name" Binding="{Binding Task.Name}" Width="*" MinWidth="100" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="CreationDate" Binding="{Binding Task.CreationDate}" IsReadOnly="True" Width="150" CanUserSort="False"/>
+                    <mui:DataGridTextColumn Header="StartDate" Binding="{Binding Task.StartDate}" IsReadOnly="True" Width="150" CanUserSort="False"/>
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseRightButtonDown">
