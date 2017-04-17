@@ -41,8 +41,8 @@
                     <DataGridTemplateColumn IsReadOnly="True" Width="100" CanUserSort="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Background="{Binding MetaData.Color}" CornerRadius="5" Padding="4" Margin="2">
-                                    <TextBlock Foreground="White" FontWeight="Bold" FontSize="11" Text="{Binding MetaData.State}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border Background="{Binding MetaData.Color}" CornerRadius="5" Padding="3" Margin="1">
+                                    <TextBlock Foreground="White" FontWeight="Bold" FontSize="10" Text="{Binding MetaData.State}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
