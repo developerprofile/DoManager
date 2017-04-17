@@ -42,7 +42,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Background="{Binding MetaData.Color}" CornerRadius="5" Padding="3" Margin="1">
-                                    <TextBlock Foreground="White" FontWeight="Bold" FontSize="10" Text="{Binding MetaData.State}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Foreground="{Binding MetaData.TextColor}" FontWeight="Bold" FontSize="10" Text="{Binding MetaData.State}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
