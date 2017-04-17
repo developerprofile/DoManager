@@ -12,9 +12,9 @@
 
 Download the [ZIP file](https://github.com/viper3400/DoManager/releases/latest) and extract it. No installation or setup, it’s portable.
 
-The ZIP file contains a template database (TEMPLATE.FDB). You could use this template right away or copy and rename this template to a more friendly name. Make sure, your Windows user has the rights to write to the *.FDB file. Otherwise DoManger won't run correct and will crash on apllication shutdown (see #12).
+The ZIP file contains a template database (TEMPLATE.FDB). You could use this template right away or copy and rename this template to a more friendly name. Make sure, your Windows user has the rights to write to the *.FDB file. Otherwise DoManger won't run correct and will crash on application shutdown (see https://github.com/viper3400/DoManager/issues/12).
 
-When starting DoManger it will ask you to select a database. Select your copied database template file to start.
+When starting DoManger, it will ask you to select a database. Select your copied database template file to start.
 
 When creating time logs reports are saved under your user's documents folder. A subfolder “DoManagerReports” will be created automatically if it not exists.
 
@@ -26,7 +26,7 @@ When creating time logs reports are saved under your user's documents folder. A 
 
 ### Change a Task Name
 
-Once you've created a task you could still edit it's name. Double click on the name in the task list and provide the new name. ENTER wil save your changes.
+Once you've created a task you could still edit it's name. Double click on the name in the task list and provide the new name. ENTER will save your changes.
 
 ### Start Task
 
@@ -48,7 +48,7 @@ You could interrupt the active task in three ways:
 * Mark an active task as BLOCKED (context menu)
 * Mark an active task as NEXT
 
-### Interrupt active task
+### BLOCK a Task
 
 Use the context menu (right mouse button) to mark a task as BLOCKED. It won't be become NEXT until you unblock it or set it NEXT manually.
 
