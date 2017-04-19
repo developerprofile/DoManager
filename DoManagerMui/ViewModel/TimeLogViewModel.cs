@@ -1,6 +1,7 @@
 ﻿using ch.jaxx.TaskManager.DataAccess;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,14 @@ namespace DoManagerMui.ViewModel
             SelectedDate = DateTime.Now - new TimeSpan(1, 0, 0, 0);
             OnExportTimeLog = new RelayCommand(ExecuteExportTimeLog);
             GotMouseCapture = new RelayCommand<MouseEventArgs>(ExecuteGotMouseCapture);
+
+            Messenger.Default.Register<NavigationMessage>(this, p =>
+            {
+                if (p.IsRefreshRequested)
+                {
+                    RefreshPhaseList(SelectedDate);
+                }
+            });
         }
 
         public DateTime SelectedDate

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FirstFloor.ModernUI.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,17 +13,39 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FirstFloor.ModernUI.Windows.Navigation;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace DoManagerMui.Views
 {
     /// <summary>
     /// Interaction logic for TimeLogView.xaml
     /// </summary>
-    public partial class TimeLogView : UserControl
+    public partial class TimeLogView : UserControl, IContent
     {
         public TimeLogView()
         {
             InitializeComponent();
+        }
+
+        public void OnFragmentNavigation(FirstFloor.ModernUI.Windows.Navigation.FragmentNavigationEventArgs e)
+        {
+            
+        }
+
+        public void OnNavigatedFrom(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
+        {
+            
+        }
+
+        public void OnNavigatedTo(FirstFloor.ModernUI.Windows.Navigation.NavigationEventArgs e)
+        {
+            Messenger.Default.Send<NavigationMessage>(new NavigationMessage() { IsRefreshRequested = true });
+        }
+
+        public void OnNavigatingFrom(FirstFloor.ModernUI.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            
         }
     }
 }
