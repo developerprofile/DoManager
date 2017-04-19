@@ -9,23 +9,51 @@
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform" 
              DataContext="{Binding TimeLogView, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="1000">
     <Grid>
-        <StackPanel>
-            <Calendar SelectedDate="{Binding SelectedDate}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="GotMouseCapture">
-                        <cmd:EventToCommand Command="{Binding GotMouseCapture}" PassEventArgsToCommand="True" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="CellEditEnding">
-                        <cmd:EventToCommand Command="{Binding OnCellEditEnding}" PassEventArgsToCommand="True" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <Calendar.Background>
-                    <SolidColorBrush Color="White" Opacity="0.8" />
-                </Calendar.Background>
-            </Calendar>
-            <Button Content="Export time log" Width="170" Command="{Binding OnExportTimeLog}" />
-        </StackPanel>
+        <DockPanel Height="Auto" Width="Auto" LastChildFill="True">
+            <StackPanel>
+                <Calendar SelectedDate="{Binding SelectedDate}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotMouseCapture">
+                            <cmd:EventToCommand Command="{Binding GotMouseCapture}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="CellEditEnding">
+                            <cmd:EventToCommand Command="{Binding OnCellEditEnding}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Calendar.Background>
+                        <SolidColorBrush Color="White" Opacity="0.8" />
+                    </Calendar.Background>
+                </Calendar>
+                <Button Content="Export time log" Width="Auto" Command="{Binding OnExportTimeLog}" />
+                <Button Content="Open Export Folder" Width="Auto" Command="{Binding OnExportTimeLog}" />
+            </StackPanel>
+            <Grid Margin="10,5,0,5">
+                <DataGrid ItemsSource="{Binding TaskList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Background>
+                        <SolidColorBrush Color="White" Opacity="0.4"/>
+                    </DataGrid.Background>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <mui:DataGridTextColumn Header="Id" Binding="{Binding Task.Id}" Visibility="Hidden" IsReadOnly="True" Width="100" CanUserSort="False"/>
+                        <mui:DataGridTextColumn Header="Name" Binding="{Binding Task.Name}" Width="*" MinWidth="100" IsReadOnly="True" CanUserSort="False"/>
+                        <mui:DataGridTextColumn Header="Time Spent" Binding="{Binding Task.Name}" Width="150" IsReadOnly="True" CanUserSort="False"/>
+                    </DataGrid.Columns>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseRightButtonDown">
+                            <cmd:EventToCommand Command="{Binding LoadContextMenu}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="CellEditEnding">
+                            <cmd:EventToCommand Command="{Binding OnCellEditEnding}" PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DataGrid>
+            </Grid>
+        </DockPanel>
     </Grid>
 </UserControl>
