@@ -261,5 +261,11 @@ namespace ch.jaxx.TaskManager.DataAccess
                 return doDataOps.ActiveTask != null;
             }
         }
+
+        public IEnumerable<string> GetTaskPhaseReport(DateTime? Day = null)
+        {
+            var result = doDataOps.GetTaskPhaseList(Day);
+            return result;
+        }
     }
 }

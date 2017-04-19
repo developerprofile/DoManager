@@ -30,7 +30,7 @@
                 <!--<Button Margin="0,5,0,0" Content="Open Export Folder" Width="Auto" Command="{Binding OnExportTimeLog}" />-->
             </StackPanel>
             <Grid Margin="10,5,0,5">
-                <DataGrid ItemsSource="{Binding TaskList}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid ItemsSource="{Binding PhaseList}" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.Background>
                         <SolidColorBrush Color="White" Opacity="0.4"/>
                     </DataGrid.Background>
@@ -40,9 +40,9 @@
                         </Style>
                     </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <mui:DataGridTextColumn Header="Id" Binding="{Binding Task.Id}" Visibility="Hidden" IsReadOnly="True" Width="100" CanUserSort="False"/>
-                        <mui:DataGridTextColumn Header="Name" Binding="{Binding Task.Name}" Width="*" MinWidth="100" IsReadOnly="True" CanUserSort="False"/>
-                        <mui:DataGridTextColumn Header="Time Spent" Binding="{Binding Task.Name}" Width="150" IsReadOnly="True" CanUserSort="False"/>
+                      
+                        <mui:DataGridTextColumn Header="Name" Binding="{Binding Path=.}" Width="*" MinWidth="100" IsReadOnly="True" CanUserSort="False"/>
+                        <!--<mui:DataGridTextColumn Header="Time Spent" Binding="{Binding Task.Name}" Width="150" IsReadOnly="True" CanUserSort="False"/>-->
                     </DataGrid.Columns>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseRightButtonDown">

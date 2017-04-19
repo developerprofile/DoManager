@@ -337,6 +337,21 @@ namespace ch.jaxx.TaskManager.DataAccess
         {
             using (var scope = Container.BeginLifetimeScope())
             {
+                var taskTaskPhasesConnectors = GetTaskPhases(Day);
+
+                var report = Container.Resolve<ITimeReport>();
+                var result = report.ReportList(taskTaskPhasesConnectors, Day, Day + new TimeSpan(1, 0, 0, 0));
+                var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}.txt",
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.ToString("yyyy_MM_dd"));
+                report.WriteToFile(filepath);
+
+            }
+        }
+
+        private List<ITaskTaskPhaseConnector> GetTaskPhases(DateTime Day)
+        {
+            using (var scope = Container.BeginLifetimeScope())
+            {
                 var nextDay = Day + new TimeSpan(1, 0, 0, 0);
                 // Get phases for a date
                 var phases = context.TaskPhases.Where(p => p.EndDate >= Day && p.EndDate < nextDay);
@@ -346,8 +361,8 @@ namespace ch.jaxx.TaskManager.DataAccess
                 var taskTaskPhasesConnectors = new List<ITaskTaskPhaseConnector>();
                 // Iterate throught these task and sum the phases
                 foreach (var task in tasks)
-                {                    
-                    
+                {
+
                     // Get phases for this dedicated task
                     var taskPhases = phases.Where(p => p.TaskId == task.Id).ToList<ITaskPhase>();
 
@@ -357,17 +372,24 @@ namespace ch.jaxx.TaskManager.DataAccess
                     taskTaskPhasesConnectors.Add(connector);
                 }
 
-                var report = Container.Resolve<ITimeReport>();
-                var result = report.ReportList(taskTaskPhasesConnectors, Day, Day + new TimeSpan(1, 0, 0, 0));
-                var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}.txt",
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.ToString("yyyy_MM_dd"));
-                report.WriteToFile(filepath);                
-                
+                return taskTaskPhasesConnectors;
             }
-               
-            
-
-            
         }
-    }
+
+        internal IEnumerable<string> GetTaskPhaseList (DateTime? Day = null)
+        {
+            // filter by day if one is provided
+            if (Day.HasValue)
+            {
+                var taskPhases = GetTaskPhases(Day.Value);
+                using (var scope = Container.BeginLifetimeScope())
+                {
+                    var report = Container.Resolve<ITimeReport>();
+                    var result = report.ReportList(taskPhases, Day.Value, Day.Value + new TimeSpan(1, 0, 0, 0));
+                    return result;
+                }
+            }
+            else throw new NotSupportedException();
+        }
+        }
 }

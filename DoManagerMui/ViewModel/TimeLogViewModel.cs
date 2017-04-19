@@ -14,6 +14,7 @@ namespace DoManagerMui.ViewModel
     {
         private TaskManager taskMan;
         private DateTime selectedDate;
+        private IEnumerable<string> phaseList;
 
         public TimeLogViewModel(TaskManager TaskManager)
         {
@@ -34,6 +35,22 @@ namespace DoManagerMui.ViewModel
                 if (selectedDate == value)
                     return;
                 selectedDate = value;
+                RefreshPhaseList(value);
+                RaisePropertyChanged();
+            }
+        }
+
+        public IEnumerable<string> PhaseList
+        {
+            get
+            {
+                return phaseList;
+            }
+            set
+            {
+                if (phaseList == value)
+                    return;
+                phaseList = value;
                 RaisePropertyChanged();
             }
         }
@@ -56,5 +73,11 @@ namespace DoManagerMui.ViewModel
                 Mouse.Capture(null);
             }
         }
+
+        private void RefreshPhaseList(DateTime Day)
+        {
+            PhaseList = taskMan.GetTaskPhaseReport(Day);
+        }
+
     }
 }
