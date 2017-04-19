@@ -27,7 +27,7 @@
                     </Calendar.Background>
                 </Calendar>
                 <Button Content="Export time log" Width="Auto" Command="{Binding OnExportTimeLog}" />
-                <Button Content="Open Export Folder" Width="Auto" Command="{Binding OnExportTimeLog}" />
+                <!--<Button Margin="0,5,0,0" Content="Open Export Folder" Width="Auto" Command="{Binding OnExportTimeLog}" />-->
             </StackPanel>
             <Grid Margin="10,5,0,5">
                 <DataGrid ItemsSource="{Binding TaskList}" AutoGenerateColumns="False" CanUserAddRows="False">
