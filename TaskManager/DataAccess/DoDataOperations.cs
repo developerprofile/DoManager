@@ -353,10 +353,10 @@ namespace ch.jaxx.TaskManager.DataAccess
             using (var scope = Container.BeginLifetimeScope())
             {
                 var nextDay = Day + new TimeSpan(1, 0, 0, 0);
-                // Get phases for a date
-                var phases = context.TaskPhases.Where(p => p.EndDate >= Day && p.EndDate < nextDay);
+                // Get relevant taskid of the phases for a date
+                var taskIds = context.TaskPhases.Where(p => p.EndDate >= Day && p.EndDate < nextDay).Select(p => p.TaskId).ToList();
                 // Get tasks for this phases
-                var tasks = context.Tasks.Where(t => phases.Select(p => p.TaskId).Contains(t.Id));
+                var tasks = context.Tasks.Where(t => taskIds.Contains(t.Id));
 
                 var taskTaskPhasesConnectors = new List<ITaskTaskPhaseConnector>();
                 // Iterate throught these task and sum the phases
@@ -364,7 +364,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                 {
 
                     // Get phases for this dedicated task
-                    var taskPhases = phases.Where(p => p.TaskId == task.Id).ToList<ITaskPhase>();
+                    var taskPhases = context.TaskPhases.Where(p => p.TaskId == task.Id && p.EndDate >= Day && p.EndDate < nextDay).ToList<ITaskPhase>();
 
                     var connector = Container.Resolve<ITaskTaskPhaseConnector>();
                     connector.OwnerTask = task;
