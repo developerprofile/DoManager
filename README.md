@@ -18,9 +18,15 @@ When starting DoManger, it will ask you to select a database. Select your copied
 
 When creating time logs reports are saved under your user's documents folder. A subfolder “DoManagerReports” will be created automatically if it not exists.
 
-## Screenshot
+## Screenshots
 
-![alt text](docs/images/MainWindow.png "DoManager Main Window")
+### Task List (Main View)
+
+![alt text](docs/images/MainWindow.png "DoManager Main View")
+
+### Time Log View
+
+![alt text](docs/images/TimeLogView.png "DoManager TimeLog View")
 
 ## Usage
 
