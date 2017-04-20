@@ -182,6 +182,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                 if (activeTask != null)
                 {
                     doDataOps.MarkTaskAsNext(activeTask);
+                    doDataOps.EndTaskPhaseNow(activeTask);
                 }
                 else doDataOps.MarkTaskAsNext(doDataOps.OldestOpenTask);
                 return nextTask;
