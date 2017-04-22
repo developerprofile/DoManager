@@ -6,7 +6,7 @@ namespace ch.jaxx.TaskManager.DataAccess
 	{
 		public FirebirdContextConfiguration()
 		{
-			SetDatabaseInitializer<FirebirdContext>(null);
+			SetDatabaseInitializer<FirebirdContext>(new CreateDatabaseIfNotExists<FirebirdContext>());
 		}
 	}
 }
