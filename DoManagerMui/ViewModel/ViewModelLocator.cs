@@ -45,22 +45,29 @@ namespace DoManagerMui.ViewModel
                 if (databaseFileName == "") Environment.Exit(-1);
             }
             var connectionString = String.Format(@"server type=Embedded;user id=sysdba;password=masterky;dialect=3;character set=UTF8;client library=fbembed.dll;database={0}", databaseFileName);
-            var taskMan = new TaskManager(connectionString);
+
+            var settings = new DoManagerSettings
+            {
+                TimeReportExportPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DoManagerReports")
+            };
+
+            var taskMan = new TaskManager(connectionString, settings);
 
             var builder = new ContainerBuilder();
             builder.RegisterType<MainViewModel>();
             builder.RegisterType<TaskListViewModel>().WithParameters(new TypedParameter[]
                 {
-                    new TypedParameter(typeof(TaskManager), taskMan), 
+                    new TypedParameter(typeof(TaskManager), taskMan),
                     new TypedParameter(typeof(MainWindow), App.Current.MainWindow)
                 });
             builder.RegisterType<TimeLogViewModel>().WithParameters(new TypedParameter[]
                 {
-                    new TypedParameter(typeof(TaskManager), taskMan)
+                    new TypedParameter(typeof(TaskManager), taskMan),
+                    new TypedParameter(typeof(IDoManagerSettings), settings)
                 });
             builder.RegisterType<SettingsViewModel>();
             viewContainer = builder.Build();
-            
+
             ////if (ViewModelBase.IsInDesignModeStatic)
             ////{
             ////    // Create design time view services and models
@@ -72,7 +79,7 @@ namespace DoManagerMui.ViewModel
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
-          
+
         }
 
         private string GetDatabase()
@@ -108,7 +115,7 @@ namespace DoManagerMui.ViewModel
                 }
             }
         }
-        
+
         public TaskListViewModel TaskListView
         {
             get

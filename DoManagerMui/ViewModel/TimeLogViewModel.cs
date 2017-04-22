@@ -15,11 +15,13 @@ namespace DoManagerMui.ViewModel
     {
         private TaskManager taskMan;
         private DateTime selectedDate;
+        private IDoManagerSettings _settings;
         private IEnumerable<string> phaseList;
 
-        public TimeLogViewModel(TaskManager TaskManager)
+        public TimeLogViewModel(TaskManager TaskManager, IDoManagerSettings Settings)
         {
             taskMan = TaskManager;
+            _settings = Settings;
             SelectedDate = DateTime.Now - new TimeSpan(1, 0, 0, 0);
             OnExportTimeLog = new RelayCommand(ExecuteExportTimeLog);
             GotMouseCapture = new RelayCommand<MouseEventArgs>(ExecuteGotMouseCapture);
@@ -91,8 +93,7 @@ namespace DoManagerMui.ViewModel
 
         private void ExecuteOpenExportFolder()
         {
-            var path = String.Format("{0}\\DoManagerReports",
-                   Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            var path = _settings.TimeReportExportPath;
             System.Diagnostics.Process.Start(path);
         }
 

@@ -8,17 +8,19 @@ namespace ch.jaxx.TaskManager.DataAccess
     {
         private string connectionString;
         private DoDataOperations doDataOps;
+        private IDoManagerSettings _settings;
         private static IContainer Container { get; set; }
 
         /// <summary>
         /// Creates a new instance of TaskManager
         /// </summary>
         /// <param name="ConnectionString"></param>
-        public TaskManager(string ConnectionString)
+        public TaskManager(string ConnectionString, IDoManagerSettings Settings)
         {
             InitAutofacContainer();
             this.connectionString = ConnectionString;
-            this.doDataOps = new DoDataOperations(this.connectionString, Container);
+            _settings = Settings; 
+            this.doDataOps = new DoDataOperations(this.connectionString, _settings, Container);
         }
 
         private void InitAutofacContainer()
@@ -100,13 +102,13 @@ namespace ch.jaxx.TaskManager.DataAccess
                         doDataOps.EndTaskPhaseNow(task);
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
-                    case TaskState.NEXT:                    
+                    case TaskState.NEXT:
                         nextTask = task;
                         break;
                     case TaskState.BLOCKED:
                         nextTask = doDataOps.MarkTaskAsNext(task);
                         break;
-                    case TaskState.DONE:                    
+                    case TaskState.DONE:
                     default:
                         break;
                 }
@@ -145,7 +147,7 @@ namespace ch.jaxx.TaskManager.DataAccess
                     doDataOps.BlockTask(task);
                     MarkNextTask();
                     break;
-            }            
+            }
         }
 
         /// <summary>

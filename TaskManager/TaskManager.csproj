@@ -78,8 +78,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\DoDataOperations.cs" />
+    <Compile Include="DataAccess\DoManagerSettings.cs" />
     <Compile Include="DataAccess\FirebirdContext.cs" />
     <Compile Include="DataAccess\FirebirdContextConfiguration.cs" />
+    <Compile Include="DataAccess\IDoManagerSettings.cs" />
     <Compile Include="DataAccess\ITaskPhase.cs" />
     <Compile Include="DataAccess\ITaskTaskPhaseConnector.cs" />
     <Compile Include="DataAccess\ITimeReport.cs" />

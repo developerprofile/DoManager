@@ -10,6 +10,7 @@ namespace ch.jaxx.TaskManager.DataAccess
     public class DoDataOperations
     {
         private string connectionString;
+        private IDoManagerSettings _settings;
         private FirebirdContext context;        
         private static IContainer Container { get; set; }
         private static readonly LogSource Log = new LogSource();
@@ -18,10 +19,11 @@ namespace ch.jaxx.TaskManager.DataAccess
         /// Creates a new instance of DoDataaOperations
         /// </summary>
         /// <param name="ConnectionString"></param>
-        public DoDataOperations(string ConnectionString, IContainer IoCContainer)
+        public DoDataOperations(string ConnectionString, IDoManagerSettings Settings, IContainer IoCContainer)
         {
             this.connectionString = ConnectionString;
             this.context = new FirebirdContext(this.connectionString);
+            _settings = Settings;
             Container = IoCContainer;
         }
 
@@ -341,8 +343,11 @@ namespace ch.jaxx.TaskManager.DataAccess
 
                 var report = Container.Resolve<ITimeReport>();
                 var result = report.ReportList(taskTaskPhasesConnectors, Day, Day + new TimeSpan(1, 0, 0, 0));
-                var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}.txt",
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.ToString("yyyy_MM_dd"));
+                var path = _settings.TimeReportExportPath;
+                var file = String.Format($"TimeReport_{Day.ToString("yyyy_MM_dd")}.txt");
+                var filepath = System.IO.Path.Combine(path, file);
+                //var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}.txt",
+                //    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.ToString("yyyy_MM_dd"));
                 report.WriteToFile(filepath);
 
             }
