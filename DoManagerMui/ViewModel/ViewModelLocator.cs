@@ -37,6 +37,7 @@ namespace DoManagerMui.ViewModel
             string databaseFileName;
             if (ViewModelBase.IsInDesignModeStatic)
             {
+                // set a path to a copy of TEMPLATE.FDB in order to get a XAML design preview
                 databaseFileName = @"D:\TEMP\WORK3.FDB";
             }
             else
