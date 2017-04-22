@@ -311,27 +311,7 @@ namespace ch.jaxx.TaskManager.DataAccess
             {
                // doneTasks = doneTasks.Where(x => DbFunctions.TruncateTime(x.DoneDate.Value) == Day.Value);
                 LogTaskPhaseDuration(Day.Value);
-            }
-
-            // order the tasks by done date
-            //doneTasks.OrderBy(t => t.DoneDate);
-
-            //// foreach task which is done
-            //foreach (var task in doneTasks)
-            //{
-            //    var taskDuration = new TimeSpan();
-            //    var phases = context.TaskPhases.Where(p => p.TaskId == task.Id);
-
-            //    // foreach phase of this task
-            //    foreach (var phase in phases)
-            //    {
-            //        var phaseduration = phase.EndDate.Value - phase.StartDate.Value;
-            //        taskDuration = taskDuration.Add(phaseduration);
-            //    }
-
-            //    Logger.Log(LogEintragTyp.Hinweis, String.Format("TaskDoneDate: {1} |  Duration {2} | Task: {0}", task.Name, task.DoneDate, taskDuration.ToString()));
-            //}
-            
+            }          
 
         }
 
@@ -346,8 +326,6 @@ namespace ch.jaxx.TaskManager.DataAccess
                 var path = _settings.TimeReportExportPath;
                 var file = String.Format($"TimeReport_{Day.ToString("yyyy_MM_dd")}.txt");
                 var filepath = System.IO.Path.Combine(path, file);
-                //var filepath = String.Format("{0}\\DoManagerReports\\TimeReport_{1}.txt",
-                //    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Day.ToString("yyyy_MM_dd"));
                 report.WriteToFile(filepath);
 
             }

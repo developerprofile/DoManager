@@ -68,19 +68,6 @@ namespace DoManagerMui.ViewModel
                 });
             builder.RegisterType<SettingsViewModel>();
             viewContainer = builder.Build();
-
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
-
-
         }
 
         private string GetDatabase()
