@@ -20,10 +20,10 @@
                 <TextBox Text="{Binding TaskInputBox,UpdateSourceTrigger=PropertyChanged}" Width="630" Margin="5,0,5,0" />
             </WrapPanel>
             <WrapPanel  Margin="0,5,0,5">
-                <Button Content="Create new task" Width="150" Margin="5,0,5,0" Command="{Binding CreateNewTask}"/>
-                <Button Content="Interrupt active task" Width="150" Margin="5,0,5,0" Command="{Binding InterruptTask}"/>
-                <Button Content="Start next task"  Width="150" Margin="5,0,5,0" Command="{Binding StartNextTask}"/>
-                <Button Content="Finish task"  Width="150" Margin="5,0,5,0" Command="{Binding FinishTask}"/>
+                <Button Content="Create New Task" Width="150" Margin="5,0,5,0" Command="{Binding CreateNewTask}"/>
+                <Button Content="Interrupt Active Task" Width="150" Margin="5,0,5,0" Command="{Binding InterruptTask}"/>
+                <Button Content="Start Next Task"  Width="150" Margin="5,0,5,0" Command="{Binding StartNextTask}"/>
+                <Button Content="Finish Task"  Width="150" Margin="5,0,5,0" Command="{Binding FinishTask}"/>
             </WrapPanel>
         </StackPanel>
         <Grid Margin="0,5,0,5" Grid.Row="1">

@@ -113,7 +113,7 @@ namespace DoManagerMui.ViewModel
 
             var contextMenu = new ContextMenu();
 
-            var markNextMenuItem = new MenuItem { Header = "Mark as next" };            
+            var markNextMenuItem = new MenuItem { Header = "Mark As Next" };            
 
             markNextMenuItem.Click += (s, e) =>
             {
