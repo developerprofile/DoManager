@@ -41,7 +41,7 @@
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                       
-                        <mui:DataGridTextColumn Header="Log Entry" Binding="{Binding}" Width="*" MinWidth="100" IsReadOnly="True" CanUserSort="False"/>
+                        <mui:DataGridTextColumn Header="Log Entry" Binding="{Binding Mode=OneTime}" Width="*" MinWidth="100" IsReadOnly="False" CanUserSort="False"/>
                         <!--<mui:DataGridTextColumn Header="Time Spent" Binding="{Binding Task.Name}" Width="150" IsReadOnly="True" CanUserSort="False"/>-->
                     </DataGrid.Columns>
                     <i:Interaction.Triggers>
