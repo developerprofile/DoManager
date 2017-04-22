@@ -26,8 +26,8 @@
                         <SolidColorBrush Color="White" Opacity="0.8" />
                     </Calendar.Background>
                 </Calendar>
-                <Button Content="Export Time Log" Width="Auto" Command="{Binding OnExportTimeLog}" />
-                <!--<Button Margin="0,5,0,0" Content="Open Export Folder" Width="Auto" Command="{Binding OnExportTimeLog}" />-->
+                <Button Margin="0,3,0,0" Content="Export Time Log" Width="Auto" Command="{Binding OnExportTimeLog}" />
+                <Button Margin="0,5,0,0" Content="Open Export Folder" Width="Auto" Command="{Binding OnOpenExportFolder}" />
             </StackPanel>
             <Grid Margin="10,5,0,5">
                 <DataGrid ItemsSource="{Binding PhaseList}" AutoGenerateColumns="False" CanUserAddRows="False">
