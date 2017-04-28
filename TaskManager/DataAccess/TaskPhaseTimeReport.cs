@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace ch.jaxx.TaskManager.DataAccess
 {
@@ -34,7 +35,14 @@ namespace ch.jaxx.TaskManager.DataAccess
             foreach (var task in TaskTaskPhaseConnectors)
             {
                 var duration = timeReporter.GetTaskPhasesDuration(task.MemberTaskPhases, FromDate, ToDate);
-                resultList.Add(String.Format("Task: {0}, PhasesDuration: {1}", task.OwnerTask.Name, duration.ToString()));
+                var durationStringBuilder = new StringBuilder();
+                if (duration.Days != 0)
+                {
+                    durationStringBuilder.Append($"{duration.Days.ToString()} day(s), ");
+                }
+                durationStringBuilder.Append(duration.ToString(@"hh\:mm\:ss"));
+
+                resultList.Add(String.Format("Task: {0}, PhasesDuration: {1}", task.OwnerTask.Name, durationStringBuilder.ToString()));
             }
             report = resultList;
             return report;
