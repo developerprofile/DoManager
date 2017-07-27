@@ -66,7 +66,7 @@ If this text file exists, the button "Load Todo.txt" will be enabled in DoManage
  * will be inserted into DoManager task queue and will be availbale as NEXT tasks
  * will be marked as completed in the todo.txt at the same time.
  
-Long story short: Basically, you are "moving" your tasks from todo.txt into DoManager.
+Long story short: Basically, you are "moving" your due tasks from todo.txt into DoManager.
 
 For now, this is all of the magic. For creating and maintaining the todo.txt you may use other apps, see http://benrhughes.github.io/todotxt.net/ or http://todotxt.com/.
 
