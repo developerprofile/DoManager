@@ -12,11 +12,17 @@
 
 Download the [ZIP file](https://github.com/viper3400/DoManager/releases/latest) and extract it. No installation or setup, it’s portable.
 
-The ZIP file contains a template database (TEMPLATE.FDB). You could use this template right away or copy and rename this template to a more friendly name. Make sure, your Windows user has the rights to write to the *.FDB file. Otherwise DoManger won't run correct and will crash on application shutdown (see https://github.com/viper3400/DoManager/issues/12).
+The ZIP file contains a template database (TEMPLATE.FDB). You could use this template right away or copy and rename this template to a more friendly name. 
 
 When starting DoManger, it will ask you to select a database. Select your copied database template file to start.
 
 When creating time logs reports are saved under your user's documents folder. A subfolder “DoManager/Reports” will be created automatically if it not exists. (Folder is named DoManagerReports in DoManager version < 3.5.0)
+
+### Limitations !!!
+
+* Make sure, your Windows user has the rights to write to the *.FDB file. Otherwise DoManger won't run correct and will crash on application shutdown (see https://github.com/viper3400/DoManager/issues/12).
+* Make sure, your database file is placed on a local drive. DoManager will not work at all with a database file placed on a network share (and also won't work, if its mapped to a drive letter),
+
 
 ## Screenshots
 
