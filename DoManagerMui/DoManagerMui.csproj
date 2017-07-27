@@ -85,6 +85,10 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ToDoLib, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalLibs\ToDoLib.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -190,6 +194,8 @@
   <ItemGroup>
     <Resource Include="Assets\background.water.jpg" />
     <Resource Include="Assets\clock.png" />
+    <Content Include="ExternalLibs\CommonExtensions.dll" />
+    <Content Include="ExternalLibs\ToDoLib.dll" />
     <Content Include="Resources\TM.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -18,6 +18,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using ch.jaxx.TaskManager.DataAccess;
+using System.IO;
 
 namespace DoManagerMui.ViewModel
 {
@@ -49,7 +50,7 @@ namespace DoManagerMui.ViewModel
 
             var settings = new DoManagerSettings
             {
-                TimeReportExportPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DoManagerReports")
+                TimeReportExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DoManager", "Reports")
             };
 
             var taskMan = new TaskManager(connectionString, settings);
@@ -59,7 +60,9 @@ namespace DoManagerMui.ViewModel
             builder.RegisterType<TaskListViewModel>().WithParameters(new TypedParameter[]
                 {
                     new TypedParameter(typeof(TaskManager), taskMan),
-                    new TypedParameter(typeof(MainWindow), App.Current.MainWindow)
+                    new TypedParameter(typeof(MainWindow), App.Current.MainWindow),
+                    new TypedParameter(typeof(string),
+                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DoManager", "TodoTxt","todo.txt"))
                 });
             builder.RegisterType<TimeLogViewModel>().WithParameters(new TypedParameter[]
                 {

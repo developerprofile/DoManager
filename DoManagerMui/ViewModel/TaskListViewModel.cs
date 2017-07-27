@@ -22,13 +22,15 @@ namespace DoManagerMui.ViewModel
         private MainWindow hostWindow;
         private IEnumerable<TaskViewModel> taskList;
         private string taskInputBox;
+        private string _toDoTxtFile;
 
 
 
-        public TaskListViewModel(TaskManager TaskManager, MainWindow HostWindow)
+        public TaskListViewModel(TaskManager TaskManager, MainWindow HostWindow, string ToDoTxtFile = null)
         {
             taskMan = TaskManager;
             hostWindow = HostWindow;
+            _toDoTxtFile = ToDoTxtFile;
             hostWindow.Closing += HostWindow_Closing;
             RefreshTaskList();
 
@@ -38,8 +40,9 @@ namespace DoManagerMui.ViewModel
             LoadContextMenu = new RelayCommand<MouseButtonEventArgs>(ExecuteLoadContextMenu);
             StartNextTask = new RelayCommand<EventArgs>(ExecuteStartNextTask, CanExecuteStartNextTask);
             FinishTask = new RelayCommand<EventArgs>(ExecuteFinishTask, CanExecuteFinishTask);
+            LoadToDo = new RelayCommand<EventArgs>(ExecuteLoadToDo, CanExecuteLoadToDo);
             OnCellEditEnding = new RelayCommand<DataGridCellEditEndingEventArgs>(ExecuteOnCellEditEnding);
-        }
+        }       
 
         #region Bindings / Properties
 
@@ -78,6 +81,7 @@ namespace DoManagerMui.ViewModel
         public ICommand LoadContextMenu { get; private set; }
         public ICommand StartNextTask { get; private set; }
         public ICommand FinishTask { get; private set; }
+        public ICommand LoadToDo { get; private set; }
         public ICommand OnCellEditEnding { get; private set; }
         public ICommand InterruptTask { get; private set; }
         #endregion
@@ -149,6 +153,26 @@ namespace DoManagerMui.ViewModel
         private void ExecuteFinishTask(EventArgs obj)
         {
             taskMan.FinishCurrentTask();
+            RefreshTaskList();
+        }
+
+        private bool CanExecuteLoadToDo(EventArgs arg)
+        {
+            var canExecute = false;
+            canExecute = System.IO.File.Exists(_toDoTxtFile);
+            return canExecute;
+        }
+
+        private void ExecuteLoadToDo(EventArgs obj)
+        {
+            var toDoTxtList = new ToDoLib.TaskList(_toDoTxtFile);
+            var tasks = toDoTxtList.Tasks.Where(t => t.IsTaskDue == ToDoLib.Due.Today || t.IsTaskDue == ToDoLib.Due.Overdue).ToList();
+            foreach (var task in tasks)
+            {
+                taskMan.CreateQueueTask(task.Raw);                                
+                task.Completed = true;
+                toDoTxtList.Update(task, task);                
+            }                        
             RefreshTaskList();
         }
 
