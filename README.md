@@ -16,7 +16,7 @@ The ZIP file contains a template database (TEMPLATE.FDB). You could use this tem
 
 When starting DoManger, it will ask you to select a database. Select your copied database template file to start.
 
-When creating time logs reports are saved under your user's documents folder. A subfolder “DoManagerReports” will be created automatically if it not exists.
+When creating time logs reports are saved under your user's documents folder. A subfolder “DoManager/Reports” will be created automatically if it not exists. (Folder is named DoManagerReports in DoManager version < 3.5.0)
 
 ## Screenshots
 
@@ -58,6 +58,20 @@ You could interrupt the active task in three ways:
 
 Use the context menu (right mouse button) to mark a task as BLOCKED. It won't be become NEXT until you unblock it or set it NEXT manually.
 
+## Integration of ToDo.txt
+
+Starting with DoManager version 3.5.0 you may place a *todo.txt* in your user's documents folder: "../Documents/DoManager/TodoTxt/todo.txt". This text file *need to match the spec* from https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format, otherwise nothing will happen at all.
+
+If this text file exists, the button "Load Todo.txt" will be enabled in DoManager UI. On click, all tasks from todo.txt, wich are due or overdue today:
+ * will be inserted into DoManager task queue and will be availbale as NEXT tasks
+ * will be marked as completed in the todo.txt at the same time.
+ 
+Long story short: Basically, you are "moving" your tasks from todo.txt into DoManager.
+
+For now, this is all of the magic. For creating and maintaining the todo.txt you may use other apps, see http://benrhughes.github.io/todotxt.net/ or http://todotxt.com/.
+
+Maybe there will be more todo.txt functions available from within DoManager in future, see https://github.com/viper3400/DoManager/issues/19 for progress (no promises).
+
 ## Third Party 
 
 * http://www.firebirdsql.org/
@@ -66,4 +80,5 @@ Use the context menu (right mouse button) to mark a task as BLOCKED. It won't be
 * http://www.dapplo.net/blocks/Dapplo.LogFacade/
 * https://github.com/firstfloorsoftware/mui
 * http://www.galasoft.ch/mvvm
+* https://github.com/benrhughes/todotxt.net
 
