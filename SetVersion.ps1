@@ -29,9 +29,9 @@ function Usage
 function Update-SourceVersion
 {
   Param ([string]$Version)
-  $NewVersion = 'AssemblyVersion("' + $Version + '")';
-  $NewFileVersion = 'AssemblyFileVersion("' + $Version + '")';
-
+  $NewVersion = 'AssemblyVersion("' + $Version + '.*")';
+  $NewFileVersion = 'AssemblyFileVersion("' + $Version + '.0")';
+  
   foreach ($o in $input) 
   {
     Write-output $o.FullName
@@ -50,13 +50,13 @@ function Update-AllAssemblyInfoFiles ( $version )
 {
   foreach ($file in "AssemblyInfo.cs", "AssemblyInfo.vb" ) 
   {
-    get-childitem -recurse |? {$_.Name -eq $file} | Update-SourceVersion $version ;
+    get-childitem  -recurse |? {($_.Name -eq $file) -And ($_.Directory -NotLike "*packages*")} | Update-SourceVersion $version ;
   }
 }
 
 
 # validate arguments 
-$r= [System.Text.RegularExpressions.Regex]::Match($args[0], "^[0-9]+(\.[0-9]+){1,3}$");
+$r= [System.Text.RegularExpressions.Regex]::Match($args[0], "^[0-9]+(\.[0-9]+){1,2}$");
 
 if ($r.Success)
 {
