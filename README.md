@@ -52,13 +52,18 @@ NEXT task is always the first, not BLOCKED task in the list. Use the context men
 
 You could interrupt the active task in three ways:
 
-* Provide a new task name in the upper textbox (same as creating a new task) and click on button "Interrupt active task".
+#### 1st way
+Provide a new task name in the upper textbox (same as creating a new task) and click on button "Interrupt active task".
   * This will stop the active task immediately,
   * will create a new task, 
   * set the new task active and 
   * set the old task NEXT
-* Mark an active task as BLOCKED (context menu)
-* Mark an active task as NEXT
+
+#### 2nd way
+Mark an active task as BLOCKED (context menu)
+
+#### 3rd way
+Mark an active task as NEXT
 
 ### BLOCK a Task
 
