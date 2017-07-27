@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace DoManagerMui.ViewModel
             SelectedDate = DateTime.Now - new TimeSpan(1, 0, 0, 0);
             OnExportTimeLog = new RelayCommand(ExecuteExportTimeLog);
             GotMouseCapture = new RelayCommand<MouseEventArgs>(ExecuteGotMouseCapture);
-            OnOpenExportFolder = new RelayCommand(ExecuteOpenExportFolder);
+            OnOpenExportFolder = new RelayCommand(ExecuteOpenExportFolder, CanExecuteOpenExportFolder);
 
             Messenger.Default.Register<NavigationMessage>(this, p =>
             {
@@ -35,7 +36,7 @@ namespace DoManagerMui.ViewModel
                 }
             });
         }
-
+      
         public DateTime SelectedDate
         {
             get
@@ -90,6 +91,12 @@ namespace DoManagerMui.ViewModel
                 Mouse.Capture(null);
             }
         }
+
+        private bool CanExecuteOpenExportFolder()
+        {
+            return Directory.Exists(_settings.TimeReportExportPath);
+        }
+
 
         private void ExecuteOpenExportFolder()
         {
